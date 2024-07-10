@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: core
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/core
+    password: postgres
+    username: postgres
+  liquibase:
+    enabled: true
