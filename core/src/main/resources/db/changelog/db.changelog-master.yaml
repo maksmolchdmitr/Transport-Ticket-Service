@@ -1,3 +1,9 @@
 databaseChangeLog:
-  - includeAll:
-      path: db/migrations/base
+  - include:
+      file: db/migrations/base/user-schema.sql
+  - include:
+      file: db/migrations/base/carrier-schema.sql
+  - include:
+      file: db/migrations/base/route-schema.sql
+  - include:
+      file: db/migrations/base/ticket-schema.sql

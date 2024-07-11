@@ -7,5 +7,9 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd
        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-    <includeAll path="base"/>
+<!--    <includeAll path="base"/>-->
+    <include file="base/user-schema.sql"/>
+    <include file="base/carrier-schema.sql"/>
+    <include file="base/route-schema.sql"/>
+    <include file="base/ticket-schema.sql"/>
 </databaseChangeLog>
