@@ -6,5 +6,6 @@ create table route_table
     carrier_name        varchar(32) not null,
     duration_in_minutes int         not null,
     seat_count          int         not null,
-    foreign key (carrier_name) references carrier_table (name)
+    foreign key (carrier_name) references carrier_table (name),
+    constraint unique_route_constraint unique (departure, arrival, carrier_name)
 );
