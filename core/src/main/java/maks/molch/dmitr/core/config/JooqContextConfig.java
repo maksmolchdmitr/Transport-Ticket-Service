@@ -7,6 +7,9 @@ import org.jooq.conf.RenderKeywordCase;
 import org.jooq.conf.RenderNameCase;
 import org.jooq.conf.Settings;
 import org.jooq.impl.DSL;
+import org.jooq.impl.DefaultConfiguration;
+import org.jooq.impl.DefaultExecuteListenerProvider;
+import org.jooq.tools.LoggerListener;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,7 +26,14 @@ public class JooqContextConfig {
                 .withRenderKeywordCase(RenderKeywordCase.LOWER)
                 .withParseNameCase(ParseNameCase.LOWER)
                 .withRenderNameCase(RenderNameCase.LOWER);
-        return DSL.using(connection, SQLDialect.POSTGRES, settings);
+        org.jooq.Configuration configuration = new DefaultConfiguration()
+                .set(connection)
+                .set(settings)
+                .set(SQLDialect.POSTGRES)
+                .set(new DefaultExecuteListenerProvider(
+                        new LoggerListener()
+                ));
+        return DSL.using(configuration);
     }
 
     @ConfigurationProperties(prefix = "spring.datasource")

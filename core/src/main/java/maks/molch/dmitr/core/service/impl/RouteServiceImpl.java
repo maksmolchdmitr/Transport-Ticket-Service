@@ -9,9 +9,11 @@ import maks.molch.dmitr.core.repo.RouteRepo;
 import maks.molch.dmitr.core.service.RouteService;
 import maks.molch.dmitr.core.service.exception.AlreadyExistException;
 import maks.molch.dmitr.core.service.exception.EntityNotFoundException;
+import maks.molch.dmitr.core.service.filter.RouteFilter;
 import org.jooq.exception.IntegrityConstraintViolationException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -34,5 +36,13 @@ public class RouteServiceImpl implements RouteService {
         } catch (IntegrityConstraintViolationException e) {
             throw new AlreadyExistException("Such route already exist");
         }
+    }
+
+    @Override
+    public List<FullRoute> getRoutePage(RouteFilter filter, Integer pageNumber, Integer pageSize) {
+        var fullRouteRecords = routeRepo.findAllSortByPrimaryKeyAndFiltered(filter);
+        var fromIndex = Math.min(pageNumber * pageSize, fullRouteRecords.size());
+        var toIndex = Math.min(pageNumber * pageSize + pageSize, fullRouteRecords.size());
+        return routeMapper.toRoute(fullRouteRecords.subList(fromIndex, toIndex));
     }
 }

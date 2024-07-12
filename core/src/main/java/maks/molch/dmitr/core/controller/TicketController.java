@@ -7,9 +7,11 @@ import maks.molch.dmitr.core.dto.TicketPageDto;
 import maks.molch.dmitr.core.mapper.TicketMapper;
 import maks.molch.dmitr.core.service.TicketService;
 import maks.molch.dmitr.core.service.filter.TicketFilter;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @RestController
@@ -21,21 +23,25 @@ public class TicketController {
 
     @GetMapping
     public TicketPageDto getTickets(
-            @RequestParam(value = "date_and_time_filter", required = false) Timestamp dateAndTimeFilter,
+            @DateTimeFormat(pattern = "dd.MM.yyyy HH:mm:ss")
+            @RequestParam(value = "start_date_and_time_filter", required = false) LocalDateTime startDateAndTimeFilter,
+            @DateTimeFormat(pattern = "dd.MM.yyyy HH:mm:ss")
+            @RequestParam(value = "end_date_and_time_filter", required = false) LocalDateTime endDateAndTimeFilter,
             @RequestParam(value = "departure_filter", required = false) String departureFilter,
             @RequestParam(value = "arrival_filter", required = false) String arrivalFilter,
             @RequestParam(value = "carrier_name_filter", required = false) String carrierNameFilter,
-            @RequestParam(value = "page_token", required = false, defaultValue = "") String pageToken,
-            @RequestParam(value = "page_size", required = false, defaultValue = "10") Long pageSize
+            @RequestParam(value = "page_number", required = false, defaultValue = "0") Integer pageNumber,
+            @RequestParam(value = "page_size", required = false, defaultValue = "10") Integer pageSize
     ) {
         var filter = new TicketFilter(
-                Optional.ofNullable(dateAndTimeFilter),
+                Optional.ofNullable(startDateAndTimeFilter).map(Timestamp::valueOf),
+                Optional.ofNullable(endDateAndTimeFilter).map(Timestamp::valueOf),
                 Optional.ofNullable(departureFilter),
                 Optional.ofNullable(arrivalFilter),
                 Optional.ofNullable(carrierNameFilter)
         );
-        var page = ticketService.getTicketsPage(pageToken, pageSize, filter);
-        return ticketMapper.toPageDto(page);
+        var page = ticketService.getTicketsPage(pageNumber, pageSize, filter);
+        return ticketMapper.toPageDto(page, pageNumber, pageSize);
     }
 
     @PostMapping

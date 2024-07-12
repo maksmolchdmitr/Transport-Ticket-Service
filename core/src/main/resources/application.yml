@@ -8,3 +8,4 @@ spring:
     username: postgres
   liquibase:
     enabled: true
+debug: false

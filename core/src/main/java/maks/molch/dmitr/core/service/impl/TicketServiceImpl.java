@@ -3,11 +3,8 @@ package maks.molch.dmitr.core.service.impl;
 import lombok.AllArgsConstructor;
 import maks.molch.dmitr.core.mapper.RouteMapper;
 import maks.molch.dmitr.core.mapper.TicketMapper;
-import maks.molch.dmitr.core.model.Carrier;
 import maks.molch.dmitr.core.model.FullTicket;
-import maks.molch.dmitr.core.model.FullRoute;
 import maks.molch.dmitr.core.model.Ticket;
-import maks.molch.dmitr.core.pagination.Page;
 import maks.molch.dmitr.core.repo.CarrierRepo;
 import maks.molch.dmitr.core.repo.RouteRepo;
 import maks.molch.dmitr.core.repo.TicketRepo;
@@ -18,9 +15,6 @@ import maks.molch.dmitr.core.service.filter.TicketFilter;
 import org.jooq.exception.IntegrityConstraintViolationException;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -34,29 +28,11 @@ public class TicketServiceImpl implements TicketService {
     private final RouteMapper routeMapper;
 
     @Override
-    public Page<FullTicket> getTicketsPage(String pageToken, long pageSize, TicketFilter ticketFilter) {
-        //TODO
-        return new Page<>(
-                "",
-                List.of(
-                        new FullTicket(
-                                new FullRoute(
-                                        0,
-                                        "Moscow",
-                                        "Nizhniy Novgorod",
-                                        new Carrier(
-                                                "RZD",
-                                                "+79506138215"
-                                        ),
-                                        240,
-                                        210
-                                ),
-                                Timestamp.valueOf(LocalDateTime.now()),
-                                1,
-                                BigDecimal.valueOf(1982.20d)
-                        )
-                )
-        );
+    public List<FullTicket> getTicketsPage(int pageNumber, int pageSize, TicketFilter ticketFilter) {
+        var filteredTickets = ticketRepo.findAllSortByPrimaryKeyAndFiltered(ticketFilter);
+        var fromIndex = Math.min(pageNumber * pageSize, filteredTickets.size());
+        var toIndex = Math.min(pageNumber * pageSize + pageSize, filteredTickets.size());
+        return ticketMapper.toTickets(filteredTickets.subList(fromIndex, toIndex));
     }
 
     @Override
