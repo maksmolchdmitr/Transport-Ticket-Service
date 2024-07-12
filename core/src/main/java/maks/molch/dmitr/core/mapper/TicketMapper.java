@@ -3,8 +3,6 @@ package maks.molch.dmitr.core.mapper;
 import maks.molch.dmitr.core.dto.TicketCreateRequestDto;
 import maks.molch.dmitr.core.dto.TicketDto;
 import maks.molch.dmitr.core.dto.TicketPageDto;
-import maks.molch.dmitr.core.jooq.tables.records.CarrierTableRecord;
-import maks.molch.dmitr.core.jooq.tables.records.RouteTableRecord;
 import maks.molch.dmitr.core.jooq.tables.records.TicketTableRecord;
 import maks.molch.dmitr.core.model.FullRoute;
 import maks.molch.dmitr.core.model.FullTicket;
