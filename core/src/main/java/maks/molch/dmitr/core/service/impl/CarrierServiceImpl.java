@@ -17,12 +17,12 @@ public class CarrierServiceImpl implements CarrierService {
 
     @Override
     public Carrier addCarrier(Carrier carrier) {
-        var carrierRecord = carrierMapper.toRecord(carrier);
         try {
-            carrierRepo.save(carrierRecord);
+            var carrierRecord = carrierMapper.toRecord(carrier);
+            var createdCarrier = carrierRepo.save(carrierRecord);
+            return carrierMapper.toCarrier(createdCarrier);
         } catch (IntegrityConstraintViolationException e) {
             throw new AlreadyExistException("Carrier with such name already exist");
         }
-        return carrier;
     }
 }

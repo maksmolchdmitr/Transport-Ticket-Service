@@ -13,6 +13,7 @@ import maks.molch.dmitr.core.repo.RouteRepo;
 import maks.molch.dmitr.core.repo.TicketRepo;
 import maks.molch.dmitr.core.service.TicketService;
 import maks.molch.dmitr.core.service.exception.AlreadyExistException;
+import maks.molch.dmitr.core.service.exception.EntityNotFoundException;
 import maks.molch.dmitr.core.service.filter.TicketFilter;
 import org.jooq.exception.IntegrityConstraintViolationException;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,7 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @AllArgsConstructor
@@ -59,15 +61,21 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     public FullTicket addTicket(Ticket ticket) {
-        var ticketRecord = ticketMapper.toRecord(ticket);
         try {
-            ticketRepo.save(ticketRecord);
+            var ticketRecord = ticketMapper.toRecord(ticket);
+            var routerRecord = routeRepo.findById(ticket.routeId());
+            if (Objects.isNull(routerRecord)) {
+                throw new EntityNotFoundException("Router with such id not found");
+            }
+            var carrierRecord = carrierRepo.findById(routerRecord.getCarrierName());
+            if (Objects.isNull(carrierRecord)) {
+                throw new EntityNotFoundException("Carrier with such id not found");
+            }
+            var createdTicket = ticketRepo.save(ticketRecord);
+            var fullRoute = routeMapper.toRoute(routerRecord, carrierRecord);
+            return ticketMapper.toFullTicket(createdTicket, fullRoute);
         } catch (IntegrityConstraintViolationException e) {
             throw new AlreadyExistException("Such ticket already exist");
         }
-        var routerRecord = routeRepo.findById(ticket.routeId());
-        var carrierRecord = carrierRepo.findById(routerRecord.getCarrierName());
-        var fullRoute = routeMapper.toRoute(routerRecord, carrierRecord);
-        return ticketMapper.toFullTicket(ticketRecord, fullRoute);
     }
 }
