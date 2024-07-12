@@ -13,9 +13,6 @@ target/
 .springBeans
 .sts4-cache
 
-### Jooq code ###
-/src/main/java/maks/molch/dmitr/core/jooq
-
 ### IntelliJ IDEA ###
 .idea
 *.iws
