@@ -18,7 +18,7 @@ public class UserServiceImpl implements UserService {
         try {
             return userRepo.save(user);
         } catch (IntegrityConstraintViolationException e) {
-            throw new AlreadyExistException();
+            throw new AlreadyExistException("User with such login already exist");
         }
     }
 }

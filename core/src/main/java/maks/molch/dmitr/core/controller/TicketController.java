@@ -1,14 +1,13 @@
 package maks.molch.dmitr.core.controller;
 
 import lombok.AllArgsConstructor;
+import maks.molch.dmitr.core.dto.TicketDto;
+import maks.molch.dmitr.core.dto.TicketCreateRequestDto;
 import maks.molch.dmitr.core.dto.TicketPageDto;
 import maks.molch.dmitr.core.mapper.TicketMapper;
 import maks.molch.dmitr.core.service.TicketService;
 import maks.molch.dmitr.core.service.filter.TicketFilter;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
 import java.util.Optional;
@@ -37,5 +36,12 @@ public class TicketController {
         );
         var page = ticketService.getTicketsPage(pageToken, pageSize, filter);
         return ticketMapper.toPageDto(page);
+    }
+
+    @PostMapping
+    public TicketDto addTicket(@RequestBody TicketCreateRequestDto createRequestDto) {
+        var ticket = ticketMapper.toTicket(createRequestDto);
+        var fullCreatedTicket = ticketService.addTicket(ticket);
+        return ticketMapper.toDto(fullCreatedTicket);
     }
 }
