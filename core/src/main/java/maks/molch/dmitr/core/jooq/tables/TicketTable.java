@@ -6,7 +6,7 @@ package maks.molch.dmitr.core.jooq.tables;
 
 import maks.molch.dmitr.core.jooq.DefaultSchema;
 import maks.molch.dmitr.core.jooq.Keys;
-import maks.molch.dmitr.core.jooq.tables.PurchasedTickets.PurchasedTicketsPath;
+import maks.molch.dmitr.core.jooq.tables.PurchasedTicketsTable.PurchasedTicketsTablePath;
 import maks.molch.dmitr.core.jooq.tables.RouteTable.RouteTablePath;
 import maks.molch.dmitr.core.jooq.tables.UserTable.UserTablePath;
 import maks.molch.dmitr.core.jooq.tables.records.TicketTableRecord;
@@ -201,17 +201,17 @@ public class TicketTable extends TableImpl<TicketTableRecord> {
         return _userTable;
     }
 
-    private transient PurchasedTicketsPath _purchasedTickets;
+    private transient PurchasedTicketsTablePath _purchasedTicketsTable;
 
     /**
      * Get the implicit to-many join path to the
-     * <code>PUBLIC.PURCHASED_TICKETS</code> table
+     * <code>PUBLIC.PURCHASED_TICKETS_TABLE</code> table
      */
-    public PurchasedTicketsPath purchasedTickets() {
-        if (_purchasedTickets == null)
-            _purchasedTickets = new PurchasedTicketsPath(this, null, Keys.CONSTRAINT_F16.getInverseKey());
+    public PurchasedTicketsTablePath purchasedTicketsTable() {
+        if (_purchasedTicketsTable == null)
+            _purchasedTicketsTable = new PurchasedTicketsTablePath(this, null, Keys.CONSTRAINT_BE0.getInverseKey());
 
-        return _purchasedTickets;
+        return _purchasedTicketsTable;
     }
 
     @Override

@@ -28,9 +28,9 @@ public class Tables {
     public static final CarrierTable CARRIER_TABLE = CarrierTable.CARRIER_TABLE;
 
     /**
-     * The table <code>PURCHASED_TICKETS</code>.
+     * The table <code>PURCHASED_TICKETS_TABLE</code>.
      */
-    public static final PurchasedTickets PURCHASED_TICKETS = PurchasedTickets.PURCHASED_TICKETS;
+    public static final PurchasedTicketsTable PURCHASED_TICKETS_TABLE = PurchasedTicketsTable.PURCHASED_TICKETS_TABLE;
 
     /**
      * The table <code>ROUTE_TABLE</code>.

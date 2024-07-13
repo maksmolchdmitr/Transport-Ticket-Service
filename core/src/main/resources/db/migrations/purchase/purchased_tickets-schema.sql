@@ -1,4 +1,4 @@
-create table purchased_tickets
+create table purchased_tickets_table
 (
     id serial primary key,
     user_login        varchar(32) not null,

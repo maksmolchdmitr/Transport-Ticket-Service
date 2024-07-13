@@ -41,9 +41,9 @@ public class DefaultSchema extends SchemaImpl {
     public final CarrierTable CARRIER_TABLE = CarrierTable.CARRIER_TABLE;
 
     /**
-     * The table <code>PURCHASED_TICKETS</code>.
+     * The table <code>PURCHASED_TICKETS_TABLE</code>.
      */
-    public final PurchasedTickets PURCHASED_TICKETS = PurchasedTickets.PURCHASED_TICKETS;
+    public final PurchasedTicketsTable PURCHASED_TICKETS_TABLE = PurchasedTicketsTable.PURCHASED_TICKETS_TABLE;
 
     /**
      * The table <code>ROUTE_TABLE</code>.
@@ -79,7 +79,7 @@ public class DefaultSchema extends SchemaImpl {
     public final List<Table<?>> getTables() {
         return Arrays.asList(
             CarrierTable.CARRIER_TABLE,
-                PurchasedTickets.PURCHASED_TICKETS,
+                PurchasedTicketsTable.PURCHASED_TICKETS_TABLE,
             RouteTable.ROUTE_TABLE,
             TicketTable.TICKET_TABLE,
             UserTable.USER_TABLE
