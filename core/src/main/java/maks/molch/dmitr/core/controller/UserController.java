@@ -1,6 +1,7 @@
 package maks.molch.dmitr.core.controller;
 
 import lombok.AllArgsConstructor;
+import maks.molch.dmitr.core.dto.UserCreateRequestDto;
 import maks.molch.dmitr.core.dto.UserDto;
 import maks.molch.dmitr.core.mapper.UserMapper;
 import maks.molch.dmitr.core.service.UserService;
@@ -17,9 +18,9 @@ public class UserController {
     private final UserMapper userMapper;
 
     @PostMapping("/register")
-    public UserDto register(@RequestBody UserDto user) {
-        var userTable = userMapper.dtoToRecord(user);
+    public UserDto register(@RequestBody UserCreateRequestDto createRequestDto) {
+        var userTable = userMapper.toUser(createRequestDto);
         var userRecord = userService.register(userTable);
-        return userMapper.recordToDto(userRecord);
+        return userMapper.toDto(userRecord);
     }
 }

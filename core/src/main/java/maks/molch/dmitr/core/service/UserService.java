@@ -1,7 +1,7 @@
 package maks.molch.dmitr.core.service;
 
-import maks.molch.dmitr.core.jooq.tables.records.UserTableRecord;
+import maks.molch.dmitr.core.model.User;
 
 public interface UserService {
-    UserTableRecord register(UserTableRecord user);
+    User register(User user);
 }
