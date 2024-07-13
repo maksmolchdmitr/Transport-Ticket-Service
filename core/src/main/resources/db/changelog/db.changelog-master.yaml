@@ -7,3 +7,8 @@ databaseChangeLog:
       file: db/migrations/base/route-schema.sql
   - include:
       file: db/migrations/base/ticket-schema.sql
+
+  - include:
+      file: db/migrations/purchase/purchased_tickets-schema.sql
+  - include:
+      file: db/migrations/purchase/ticket-schema.sql
