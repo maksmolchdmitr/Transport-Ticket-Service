@@ -4,8 +4,8 @@ import lombok.AllArgsConstructor;
 import maks.molch.dmitr.core.jooq.tables.records.CarrierTableRecord;
 import maks.molch.dmitr.core.jooq.tables.records.RouteTableRecord;
 import maks.molch.dmitr.core.jooq.tables.records.TicketTableRecord;
-import maks.molch.dmitr.core.repo.TicketPrimaryKey;
 import maks.molch.dmitr.core.repo.TicketRepo;
+import maks.molch.dmitr.core.repo.TicketUniqueId;
 import maks.molch.dmitr.core.service.filter.TicketFilter;
 import org.apache.commons.lang3.tuple.Triple;
 import org.jetbrains.annotations.NotNull;
@@ -32,7 +32,7 @@ public class TicketRepoImpl implements TicketRepo {
     }
 
     @Override
-    public TicketTableRecord findById(TicketPrimaryKey primaryKey) {
+    public TicketTableRecord findById(TicketUniqueId primaryKey) {
         return context
                 .selectFrom(TICKET_TABLE)
                 .where(conditionByPrimaryKey(primaryKey))
@@ -54,7 +54,7 @@ public class TicketRepoImpl implements TicketRepo {
     }
 
     @Override
-    public void delete(TicketPrimaryKey primaryKey) {
+    public void delete(TicketUniqueId primaryKey) {
         context
                 .deleteFrom(TICKET_TABLE)
                 .where(conditionByPrimaryKey(primaryKey))
@@ -62,7 +62,7 @@ public class TicketRepoImpl implements TicketRepo {
     }
 
     @Override
-    public boolean exist(TicketPrimaryKey primaryKey) {
+    public boolean exist(TicketUniqueId primaryKey) {
         var count = Objects.requireNonNullElse(context
                 .selectCount()
                 .from(TICKET_TABLE)
@@ -71,7 +71,7 @@ public class TicketRepoImpl implements TicketRepo {
         return count > 0;
     }
 
-    private static @NotNull Condition conditionByPrimaryKey(TicketPrimaryKey primaryKey) {
+    private static @NotNull Condition conditionByPrimaryKey(TicketUniqueId primaryKey) {
         return TICKET_TABLE.ROUTE_ID.eq(primaryKey.routeId())
                 .and(TICKET_TABLE.DATE_AND_TIME.eq(primaryKey.dateAndTime()))
                 .and(TICKET_TABLE.SEAT_NUMBER.eq(primaryKey.seatNumber()));

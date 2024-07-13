@@ -9,6 +9,8 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public record TicketDto(
+        @JsonProperty("id")
+        int id,
         @JsonProperty("route")
         RouteDto route,
         @JsonDeserialize(using = LocalDateTimeDeserializer.class)

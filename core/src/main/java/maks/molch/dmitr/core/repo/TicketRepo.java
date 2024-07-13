@@ -8,6 +8,6 @@ import org.apache.commons.lang3.tuple.Triple;
 
 import java.util.List;
 
-public interface TicketRepo extends JooqRepo<TicketTableRecord, TicketPrimaryKey> {
+public interface TicketRepo extends JooqRepo<TicketTableRecord, TicketUniqueId> {
     List<Triple<TicketTableRecord, RouteTableRecord, CarrierTableRecord>> findAllSortByPrimaryKeyAndFiltered(TicketFilter ticketFilter);
 }
