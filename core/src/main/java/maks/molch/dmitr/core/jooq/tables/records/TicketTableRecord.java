@@ -4,17 +4,17 @@
 package maks.molch.dmitr.core.jooq.tables.records;
 
 
+import jakarta.validation.constraints.Size;
+import maks.molch.dmitr.core.jooq.tables.TicketTable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.jooq.Record1;
+import org.jooq.impl.UpdatableRecordImpl;
+
+import javax.annotation.processing.Generated;
 import java.beans.ConstructorProperties;
 import java.math.BigInteger;
 import java.time.LocalDateTime;
-
-import javax.annotation.processing.Generated;
-
-import maks.molch.dmitr.core.jooq.tables.TicketTable;
-
-import org.jetbrains.annotations.NotNull;
-import org.jooq.Record3;
-import org.jooq.impl.UpdatableRecordImpl;
 
 
 /**
@@ -33,10 +33,25 @@ public class TicketTableRecord extends UpdatableRecordImpl<TicketTableRecord> {
     private static final long serialVersionUID = 1L;
 
     /**
+     * Setter for <code>TICKET_TABLE.ID</code>.
+     */
+    public void setId(@Nullable Integer value) {
+        set(0, value);
+    }
+
+    /**
+     * Getter for <code>TICKET_TABLE.ID</code>.
+     */
+    @Nullable
+    public Integer getId() {
+        return (Integer) get(0);
+    }
+
+    /**
      * Setter for <code>TICKET_TABLE.ROUTE_ID</code>.
      */
     public void setRouteId(@NotNull Integer value) {
-        set(0, value);
+        set(1, value);
     }
 
     /**
@@ -45,14 +60,14 @@ public class TicketTableRecord extends UpdatableRecordImpl<TicketTableRecord> {
     @jakarta.validation.constraints.NotNull
     @NotNull
     public Integer getRouteId() {
-        return (Integer) get(0);
+        return (Integer) get(1);
     }
 
     /**
      * Setter for <code>TICKET_TABLE.DATE_AND_TIME</code>.
      */
     public void setDateAndTime(@NotNull LocalDateTime value) {
-        set(1, value);
+        set(2, value);
     }
 
     /**
@@ -61,14 +76,14 @@ public class TicketTableRecord extends UpdatableRecordImpl<TicketTableRecord> {
     @jakarta.validation.constraints.NotNull
     @NotNull
     public LocalDateTime getDateAndTime() {
-        return (LocalDateTime) get(1);
+        return (LocalDateTime) get(2);
     }
 
     /**
      * Setter for <code>TICKET_TABLE.SEAT_NUMBER</code>.
      */
     public void setSeatNumber(@NotNull Integer value) {
-        set(2, value);
+        set(3, value);
     }
 
     /**
@@ -77,14 +92,14 @@ public class TicketTableRecord extends UpdatableRecordImpl<TicketTableRecord> {
     @jakarta.validation.constraints.NotNull
     @NotNull
     public Integer getSeatNumber() {
-        return (Integer) get(2);
+        return (Integer) get(3);
     }
 
     /**
      * Setter for <code>TICKET_TABLE.PRICE</code>.
      */
     public void setPrice(@NotNull BigInteger value) {
-        set(3, value);
+        set(4, value);
     }
 
     /**
@@ -93,7 +108,23 @@ public class TicketTableRecord extends UpdatableRecordImpl<TicketTableRecord> {
     @jakarta.validation.constraints.NotNull
     @NotNull
     public BigInteger getPrice() {
-        return (BigInteger) get(3);
+        return (BigInteger) get(4);
+    }
+
+    /**
+     * Setter for <code>TICKET_TABLE.PURCHASED_BY</code>.
+     */
+    public void setPurchasedBy(@Nullable String value) {
+        set(5, value);
+    }
+
+    /**
+     * Getter for <code>TICKET_TABLE.PURCHASED_BY</code>.
+     */
+    @Size(max = 32)
+    @Nullable
+    public String getPurchasedBy() {
+        return (String) get(5);
     }
 
     // -------------------------------------------------------------------------
@@ -102,8 +133,8 @@ public class TicketTableRecord extends UpdatableRecordImpl<TicketTableRecord> {
 
     @Override
     @NotNull
-    public Record3<Integer, LocalDateTime, Integer> key() {
-        return (Record3) super.key();
+    public Record1<Integer> key() {
+        return (Record1) super.key();
     }
 
     // -------------------------------------------------------------------------
@@ -120,14 +151,16 @@ public class TicketTableRecord extends UpdatableRecordImpl<TicketTableRecord> {
     /**
      * Create a detached, initialised TicketTableRecord
      */
-    @ConstructorProperties({ "routeId", "dateAndTime", "seatNumber", "price" })
-    public TicketTableRecord(@NotNull Integer routeId, @NotNull LocalDateTime dateAndTime, @NotNull Integer seatNumber, @NotNull BigInteger price) {
+    @ConstructorProperties({"id", "routeId", "dateAndTime", "seatNumber", "price", "purchasedBy"})
+    public TicketTableRecord(@Nullable Integer id, @NotNull Integer routeId, @NotNull LocalDateTime dateAndTime, @NotNull Integer seatNumber, @NotNull BigInteger price, @Nullable String purchasedBy) {
         super(TicketTable.TICKET_TABLE);
 
+        setId(id);
         setRouteId(routeId);
         setDateAndTime(dateAndTime);
         setSeatNumber(seatNumber);
         setPrice(price);
+        setPurchasedBy(purchasedBy);
         resetChangedOnNotNull();
     }
 
@@ -138,10 +171,12 @@ public class TicketTableRecord extends UpdatableRecordImpl<TicketTableRecord> {
         super(TicketTable.TICKET_TABLE);
 
         if (value != null) {
+            setId(value.getId());
             setRouteId(value.getRouteId());
             setDateAndTime(value.getDateAndTime());
             setSeatNumber(value.getSeatNumber());
             setPrice(value.getPrice());
+            setPurchasedBy(value.getPurchasedBy());
             resetChangedOnNotNull();
         }
     }

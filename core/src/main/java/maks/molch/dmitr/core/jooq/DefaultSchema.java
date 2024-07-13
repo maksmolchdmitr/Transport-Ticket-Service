@@ -4,20 +4,15 @@
 package maks.molch.dmitr.core.jooq;
 
 
-import java.util.Arrays;
-import java.util.List;
-
-import javax.annotation.processing.Generated;
-
-import maks.molch.dmitr.core.jooq.tables.CarrierTable;
-import maks.molch.dmitr.core.jooq.tables.RouteTable;
-import maks.molch.dmitr.core.jooq.tables.TicketTable;
-import maks.molch.dmitr.core.jooq.tables.UserTable;
-
+import maks.molch.dmitr.core.jooq.tables.*;
 import org.jetbrains.annotations.NotNull;
 import org.jooq.Catalog;
 import org.jooq.Table;
 import org.jooq.impl.SchemaImpl;
+
+import javax.annotation.processing.Generated;
+import java.util.Arrays;
+import java.util.List;
 
 
 /**
@@ -44,6 +39,11 @@ public class DefaultSchema extends SchemaImpl {
      * The table <code>CARRIER_TABLE</code>.
      */
     public final CarrierTable CARRIER_TABLE = CarrierTable.CARRIER_TABLE;
+
+    /**
+     * The table <code>PURCHASED_TICKETS</code>.
+     */
+    public final PurchasedTickets PURCHASED_TICKETS = PurchasedTickets.PURCHASED_TICKETS;
 
     /**
      * The table <code>ROUTE_TABLE</code>.
@@ -79,6 +79,7 @@ public class DefaultSchema extends SchemaImpl {
     public final List<Table<?>> getTables() {
         return Arrays.asList(
             CarrierTable.CARRIER_TABLE,
+                PurchasedTickets.PURCHASED_TICKETS,
             RouteTable.ROUTE_TABLE,
             TicketTable.TICKET_TABLE,
             UserTable.USER_TABLE

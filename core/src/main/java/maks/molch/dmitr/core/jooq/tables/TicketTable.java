@@ -4,41 +4,26 @@
 package maks.molch.dmitr.core.jooq.tables;
 
 
+import maks.molch.dmitr.core.jooq.DefaultSchema;
+import maks.molch.dmitr.core.jooq.Keys;
+import maks.molch.dmitr.core.jooq.tables.PurchasedTickets.PurchasedTicketsPath;
+import maks.molch.dmitr.core.jooq.tables.RouteTable.RouteTablePath;
+import maks.molch.dmitr.core.jooq.tables.UserTable.UserTablePath;
+import maks.molch.dmitr.core.jooq.tables.records.TicketTableRecord;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.jooq.Record;
+import org.jooq.*;
+import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
+import org.jooq.impl.TableImpl;
+
+import javax.annotation.processing.Generated;
 import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-
-import javax.annotation.processing.Generated;
-
-import maks.molch.dmitr.core.jooq.DefaultSchema;
-import maks.molch.dmitr.core.jooq.Keys;
-import maks.molch.dmitr.core.jooq.tables.RouteTable.RouteTablePath;
-import maks.molch.dmitr.core.jooq.tables.records.TicketTableRecord;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.jooq.Condition;
-import org.jooq.Field;
-import org.jooq.ForeignKey;
-import org.jooq.InverseForeignKey;
-import org.jooq.Name;
-import org.jooq.Path;
-import org.jooq.PlainSQL;
-import org.jooq.QueryPart;
-import org.jooq.Record;
-import org.jooq.SQL;
-import org.jooq.Schema;
-import org.jooq.Select;
-import org.jooq.Stringly;
-import org.jooq.Table;
-import org.jooq.TableField;
-import org.jooq.TableOptions;
-import org.jooq.UniqueKey;
-import org.jooq.impl.DSL;
-import org.jooq.impl.SQLDataType;
-import org.jooq.impl.TableImpl;
 
 
 /**
@@ -71,6 +56,11 @@ public class TicketTable extends TableImpl<TicketTableRecord> {
     }
 
     /**
+     * The column <code>TICKET_TABLE.ID</code>.
+     */
+    public final TableField<TicketTableRecord, Integer> ID = createField(DSL.name("ID"), SQLDataType.INTEGER.nullable(false).identity(true), this, "");
+
+    /**
      * The column <code>TICKET_TABLE.ROUTE_ID</code>.
      */
     public final TableField<TicketTableRecord, Integer> ROUTE_ID = createField(DSL.name("ROUTE_ID"), SQLDataType.INTEGER.nullable(false), this, "");
@@ -89,6 +79,11 @@ public class TicketTable extends TableImpl<TicketTableRecord> {
      * The column <code>TICKET_TABLE.PRICE</code>.
      */
     public final TableField<TicketTableRecord, BigInteger> PRICE = createField(DSL.name("PRICE"), SQLDataType.DECIMAL_INTEGER(100000).nullable(false), this, "");
+
+    /**
+     * The column <code>TICKET_TABLE.PURCHASED_BY</code>.
+     */
+    public final TableField<TicketTableRecord, String> PURCHASED_BY = createField(DSL.name("PURCHASED_BY"), SQLDataType.VARCHAR(32), this, "");
 
     private TicketTable(Name alias, Table<TicketTableRecord> aliased) {
         this(alias, aliased, (Field<?>[]) null, null);
@@ -160,14 +155,26 @@ public class TicketTable extends TableImpl<TicketTableRecord> {
 
     @Override
     @NotNull
+    public Identity<TicketTableRecord, Integer> getIdentity() {
+        return (Identity<TicketTableRecord, Integer>) super.getIdentity();
+    }
+
+    @Override
+    @NotNull
     public UniqueKey<TicketTableRecord> getPrimaryKey() {
-        return Keys.CONSTRAINT_5C;
+        return Keys.CONSTRAINT_5;
+    }
+
+    @Override
+    @NotNull
+    public List<UniqueKey<TicketTableRecord>> getUniqueKeys() {
+        return Arrays.asList(Keys.CONSTRAINT_5CD);
     }
 
     @Override
     @NotNull
     public List<ForeignKey<TicketTableRecord, ?>> getReferences() {
-        return Arrays.asList(Keys.CONSTRAINT_5);
+        return Arrays.asList(Keys.CONSTRAINT_5C, Keys.FK_TICKET_TABLE_PURCHASED_BY);
     }
 
     private transient RouteTablePath _routeTable;
@@ -177,9 +184,34 @@ public class TicketTable extends TableImpl<TicketTableRecord> {
      */
     public RouteTablePath routeTable() {
         if (_routeTable == null)
-            _routeTable = new RouteTablePath(this, Keys.CONSTRAINT_5, null);
+            _routeTable = new RouteTablePath(this, Keys.CONSTRAINT_5C, null);
 
         return _routeTable;
+    }
+
+    private transient UserTablePath _userTable;
+
+    /**
+     * Get the implicit join path to the <code>PUBLIC.USER_TABLE</code> table.
+     */
+    public UserTablePath userTable() {
+        if (_userTable == null)
+            _userTable = new UserTablePath(this, Keys.FK_TICKET_TABLE_PURCHASED_BY, null);
+
+        return _userTable;
+    }
+
+    private transient PurchasedTicketsPath _purchasedTickets;
+
+    /**
+     * Get the implicit to-many join path to the
+     * <code>PUBLIC.PURCHASED_TICKETS</code> table
+     */
+    public PurchasedTicketsPath purchasedTickets() {
+        if (_purchasedTickets == null)
+            _purchasedTickets = new PurchasedTicketsPath(this, null, Keys.CONSTRAINT_F1.getInverseKey());
+
+        return _purchasedTickets;
     }
 
     @Override

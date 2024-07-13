@@ -4,32 +4,21 @@
 package maks.molch.dmitr.core.jooq.tables;
 
 
-import java.util.Collection;
-
-import javax.annotation.processing.Generated;
-
 import maks.molch.dmitr.core.jooq.DefaultSchema;
 import maks.molch.dmitr.core.jooq.Keys;
+import maks.molch.dmitr.core.jooq.tables.PurchasedTickets.PurchasedTicketsPath;
+import maks.molch.dmitr.core.jooq.tables.TicketTable.TicketTablePath;
 import maks.molch.dmitr.core.jooq.tables.records.UserTableRecord;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jooq.Condition;
-import org.jooq.Field;
-import org.jooq.Name;
-import org.jooq.PlainSQL;
-import org.jooq.QueryPart;
-import org.jooq.SQL;
-import org.jooq.Schema;
-import org.jooq.Select;
-import org.jooq.Stringly;
-import org.jooq.Table;
-import org.jooq.TableField;
-import org.jooq.TableOptions;
-import org.jooq.UniqueKey;
+import org.jooq.Record;
+import org.jooq.*;
 import org.jooq.impl.DSL;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
+
+import javax.annotation.processing.Generated;
+import java.util.Collection;
 
 
 /**
@@ -105,6 +94,41 @@ public class UserTable extends TableImpl<UserTableRecord> {
         this(DSL.name("USER_TABLE"), null);
     }
 
+    public <O extends Record> UserTable(Table<O> path, ForeignKey<O, UserTableRecord> childPath, InverseForeignKey<O, UserTableRecord> parentPath) {
+        super(path, childPath, parentPath, USER_TABLE);
+    }
+
+    /**
+     * A subtype implementing {@link Path} for simplified path-based joins.
+     */
+    public static class UserTablePath extends UserTable implements Path<UserTableRecord> {
+
+        private static final long serialVersionUID = 1L;
+
+        public <O extends Record> UserTablePath(Table<O> path, ForeignKey<O, UserTableRecord> childPath, InverseForeignKey<O, UserTableRecord> parentPath) {
+            super(path, childPath, parentPath);
+        }
+
+        private UserTablePath(Name alias, Table<UserTableRecord> aliased) {
+            super(alias, aliased);
+        }
+
+        @Override
+        public UserTablePath as(String alias) {
+            return new UserTablePath(DSL.name(alias), this);
+        }
+
+        @Override
+        public UserTablePath as(Name alias) {
+            return new UserTablePath(alias, this);
+        }
+
+        @Override
+        public UserTablePath as(Table<?> alias) {
+            return new UserTablePath(alias.getQualifiedName(), this);
+        }
+    }
+
     @Override
     @Nullable
     public Schema getSchema() {
@@ -115,6 +139,32 @@ public class UserTable extends TableImpl<UserTableRecord> {
     @NotNull
     public UniqueKey<UserTableRecord> getPrimaryKey() {
         return Keys.CONSTRAINT_C;
+    }
+
+    private transient PurchasedTicketsPath _purchasedTickets;
+
+    /**
+     * Get the implicit to-many join path to the
+     * <code>PUBLIC.PURCHASED_TICKETS</code> table
+     */
+    public PurchasedTicketsPath purchasedTickets() {
+        if (_purchasedTickets == null)
+            _purchasedTickets = new PurchasedTicketsPath(this, null, Keys.CONSTRAINT_F.getInverseKey());
+
+        return _purchasedTickets;
+    }
+
+    private transient TicketTablePath _ticketTable;
+
+    /**
+     * Get the implicit to-many join path to the
+     * <code>PUBLIC.TICKET_TABLE</code> table
+     */
+    public TicketTablePath ticketTable() {
+        if (_ticketTable == null)
+            _ticketTable = new TicketTablePath(this, null, Keys.FK_TICKET_TABLE_PURCHASED_BY.getInverseKey());
+
+        return _ticketTable;
     }
 
     @Override

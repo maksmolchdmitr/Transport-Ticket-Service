@@ -4,12 +4,9 @@
 package maks.molch.dmitr.core.jooq;
 
 
-import javax.annotation.processing.Generated;
+import maks.molch.dmitr.core.jooq.tables.*;
 
-import maks.molch.dmitr.core.jooq.tables.CarrierTable;
-import maks.molch.dmitr.core.jooq.tables.RouteTable;
-import maks.molch.dmitr.core.jooq.tables.TicketTable;
-import maks.molch.dmitr.core.jooq.tables.UserTable;
+import javax.annotation.processing.Generated;
 
 
 /**
@@ -29,6 +26,11 @@ public class Tables {
      * The table <code>CARRIER_TABLE</code>.
      */
     public static final CarrierTable CARRIER_TABLE = CarrierTable.CARRIER_TABLE;
+
+    /**
+     * The table <code>PURCHASED_TICKETS</code>.
+     */
+    public static final PurchasedTickets PURCHASED_TICKETS = PurchasedTickets.PURCHASED_TICKETS;
 
     /**
      * The table <code>ROUTE_TABLE</code>.

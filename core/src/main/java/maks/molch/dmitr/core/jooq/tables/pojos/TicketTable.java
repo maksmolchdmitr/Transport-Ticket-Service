@@ -4,14 +4,15 @@
 package maks.molch.dmitr.core.jooq.tables.pojos;
 
 
+import jakarta.validation.constraints.Size;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.processing.Generated;
 import java.beans.ConstructorProperties;
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.time.LocalDateTime;
-
-import javax.annotation.processing.Generated;
-
-import org.jetbrains.annotations.NotNull;
 
 
 /**
@@ -29,31 +30,54 @@ public class TicketTable implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    private Integer id;
     private Integer routeId;
     private LocalDateTime dateAndTime;
     private Integer seatNumber;
     private BigInteger price;
+    private String purchasedBy;
 
     public TicketTable() {}
 
     public TicketTable(TicketTable value) {
+        this.id = value.id;
         this.routeId = value.routeId;
         this.dateAndTime = value.dateAndTime;
         this.seatNumber = value.seatNumber;
         this.price = value.price;
+        this.purchasedBy = value.purchasedBy;
     }
 
-    @ConstructorProperties({ "routeId", "dateAndTime", "seatNumber", "price" })
+    @ConstructorProperties({"id", "routeId", "dateAndTime", "seatNumber", "price", "purchasedBy"})
     public TicketTable(
+            @Nullable Integer id,
         @NotNull Integer routeId,
         @NotNull LocalDateTime dateAndTime,
         @NotNull Integer seatNumber,
-        @NotNull BigInteger price
+            @NotNull BigInteger price,
+            @Nullable String purchasedBy
     ) {
+        this.id = id;
         this.routeId = routeId;
         this.dateAndTime = dateAndTime;
         this.seatNumber = seatNumber;
         this.price = price;
+        this.purchasedBy = purchasedBy;
+    }
+
+    /**
+     * Getter for <code>TICKET_TABLE.ID</code>.
+     */
+    @Nullable
+    public Integer getId() {
+        return this.id;
+    }
+
+    /**
+     * Setter for <code>TICKET_TABLE.ID</code>.
+     */
+    public void setId(@Nullable Integer id) {
+        this.id = id;
     }
 
     /**
@@ -120,6 +144,22 @@ public class TicketTable implements Serializable {
         this.price = price;
     }
 
+    /**
+     * Getter for <code>TICKET_TABLE.PURCHASED_BY</code>.
+     */
+    @Size(max = 32)
+    @Nullable
+    public String getPurchasedBy() {
+        return this.purchasedBy;
+    }
+
+    /**
+     * Setter for <code>TICKET_TABLE.PURCHASED_BY</code>.
+     */
+    public void setPurchasedBy(@Nullable String purchasedBy) {
+        this.purchasedBy = purchasedBy;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -129,6 +169,11 @@ public class TicketTable implements Serializable {
         if (getClass() != obj.getClass())
             return false;
         final TicketTable other = (TicketTable) obj;
+        if (this.id == null) {
+            if (other.id != null)
+                return false;
+        } else if (!this.id.equals(other.id))
+            return false;
         if (this.routeId == null) {
             if (other.routeId != null)
                 return false;
@@ -153,6 +198,11 @@ public class TicketTable implements Serializable {
         }
         else if (!this.price.equals(other.price))
             return false;
+        if (this.purchasedBy == null) {
+            if (other.purchasedBy != null)
+                return false;
+        } else if (!this.purchasedBy.equals(other.purchasedBy))
+            return false;
         return true;
     }
 
@@ -160,10 +210,12 @@ public class TicketTable implements Serializable {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
+        result = prime * result + ((this.id == null) ? 0 : this.id.hashCode());
         result = prime * result + ((this.routeId == null) ? 0 : this.routeId.hashCode());
         result = prime * result + ((this.dateAndTime == null) ? 0 : this.dateAndTime.hashCode());
         result = prime * result + ((this.seatNumber == null) ? 0 : this.seatNumber.hashCode());
         result = prime * result + ((this.price == null) ? 0 : this.price.hashCode());
+        result = prime * result + ((this.purchasedBy == null) ? 0 : this.purchasedBy.hashCode());
         return result;
     }
 
@@ -171,10 +223,12 @@ public class TicketTable implements Serializable {
     public String toString() {
         StringBuilder sb = new StringBuilder("TicketTable (");
 
-        sb.append(routeId);
+        sb.append(id);
+        sb.append(", ").append(routeId);
         sb.append(", ").append(dateAndTime);
         sb.append(", ").append(seatNumber);
         sb.append(", ").append(price);
+        sb.append(", ").append(purchasedBy);
 
         sb.append(")");
         return sb.toString();
