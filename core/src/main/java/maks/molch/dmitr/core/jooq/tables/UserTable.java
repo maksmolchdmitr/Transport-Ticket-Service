@@ -104,11 +104,9 @@ public class UserTable extends TableImpl<UserTableRecord> {
     public static class UserTablePath extends UserTable implements Path<UserTableRecord> {
 
         private static final long serialVersionUID = 1L;
-
         public <O extends Record> UserTablePath(Table<O> path, ForeignKey<O, UserTableRecord> childPath, InverseForeignKey<O, UserTableRecord> parentPath) {
             super(path, childPath, parentPath);
         }
-
         private UserTablePath(Name alias, Table<UserTableRecord> aliased) {
             super(alias, aliased);
         }
@@ -149,7 +147,7 @@ public class UserTable extends TableImpl<UserTableRecord> {
      */
     public PurchasedTicketsPath purchasedTickets() {
         if (_purchasedTickets == null)
-            _purchasedTickets = new PurchasedTicketsPath(this, null, Keys.CONSTRAINT_F.getInverseKey());
+            _purchasedTickets = new PurchasedTicketsPath(this, null, Keys.CONSTRAINT_F1.getInverseKey());
 
         return _purchasedTickets;
     }

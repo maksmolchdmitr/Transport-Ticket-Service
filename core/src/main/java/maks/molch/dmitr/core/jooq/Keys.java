@@ -34,6 +34,8 @@ public class Keys {
     // -------------------------------------------------------------------------
 
     public static final UniqueKey<CarrierTableRecord> CONSTRAINT_3 = Internal.createUniqueKey(CarrierTable.CARRIER_TABLE, DSL.name("CONSTRAINT_3"), new TableField[] { CarrierTable.CARRIER_TABLE.NAME }, true);
+    public static final UniqueKey<PurchasedTicketsRecord> CONSTRAINT_F = Internal.createUniqueKey(PurchasedTickets.PURCHASED_TICKETS, DSL.name("CONSTRAINT_F"), new TableField[]{PurchasedTickets.PURCHASED_TICKETS.ID}, true);
+    public static final UniqueKey<PurchasedTicketsRecord> CONSTRAINT_F16B = Internal.createUniqueKey(PurchasedTickets.PURCHASED_TICKETS, DSL.name("CONSTRAINT_F16B"), new TableField[]{PurchasedTickets.PURCHASED_TICKETS.USER_LOGIN, PurchasedTickets.PURCHASED_TICKETS.TICKET_ID}, true);
     public static final UniqueKey<RouteTableRecord> CONSTRAINT_4 = Internal.createUniqueKey(RouteTable.ROUTE_TABLE, DSL.name("CONSTRAINT_4"), new TableField[] { RouteTable.ROUTE_TABLE.ID }, true);
     public static final UniqueKey<RouteTableRecord> UNIQUE_ROUTE_CONSTRAINT = Internal.createUniqueKey(RouteTable.ROUTE_TABLE, DSL.name("UNIQUE_ROUTE_CONSTRAINT"), new TableField[]{RouteTable.ROUTE_TABLE.DEPARTURE, RouteTable.ROUTE_TABLE.ARRIVAL, RouteTable.ROUTE_TABLE.CARRIER_NAME}, true);
     public static final UniqueKey<TicketTableRecord> CONSTRAINT_5 = Internal.createUniqueKey(TicketTable.TICKET_TABLE, DSL.name("CONSTRAINT_5"), new TableField[]{TicketTable.TICKET_TABLE.ID}, true);
@@ -44,8 +46,8 @@ public class Keys {
     // FOREIGN KEY definitions
     // -------------------------------------------------------------------------
 
-    public static final ForeignKey<PurchasedTicketsRecord, UserTableRecord> CONSTRAINT_F = Internal.createForeignKey(PurchasedTickets.PURCHASED_TICKETS, DSL.name("CONSTRAINT_F"), new TableField[]{PurchasedTickets.PURCHASED_TICKETS.USER_LOGIN}, Keys.CONSTRAINT_C, new TableField[]{UserTable.USER_TABLE.LOGIN}, true);
-    public static final ForeignKey<PurchasedTicketsRecord, TicketTableRecord> CONSTRAINT_F1 = Internal.createForeignKey(PurchasedTickets.PURCHASED_TICKETS, DSL.name("CONSTRAINT_F1"), new TableField[]{PurchasedTickets.PURCHASED_TICKETS.TICKET_ID}, Keys.CONSTRAINT_5, new TableField[]{TicketTable.TICKET_TABLE.ID}, true);
+    public static final ForeignKey<PurchasedTicketsRecord, UserTableRecord> CONSTRAINT_F1 = Internal.createForeignKey(PurchasedTickets.PURCHASED_TICKETS, DSL.name("CONSTRAINT_F1"), new TableField[]{PurchasedTickets.PURCHASED_TICKETS.USER_LOGIN}, Keys.CONSTRAINT_C, new TableField[]{UserTable.USER_TABLE.LOGIN}, true);
+    public static final ForeignKey<PurchasedTicketsRecord, TicketTableRecord> CONSTRAINT_F16 = Internal.createForeignKey(PurchasedTickets.PURCHASED_TICKETS, DSL.name("CONSTRAINT_F16"), new TableField[]{PurchasedTickets.PURCHASED_TICKETS.TICKET_ID}, Keys.CONSTRAINT_5, new TableField[]{TicketTable.TICKET_TABLE.ID}, true);
     public static final ForeignKey<RouteTableRecord, CarrierTableRecord> CONSTRAINT_4D = Internal.createForeignKey(RouteTable.ROUTE_TABLE, DSL.name("CONSTRAINT_4D"), new TableField[] { RouteTable.ROUTE_TABLE.CARRIER_NAME }, Keys.CONSTRAINT_3, new TableField[] { CarrierTable.CARRIER_TABLE.NAME }, true);
     public static final ForeignKey<TicketTableRecord, RouteTableRecord> CONSTRAINT_5C = Internal.createForeignKey(TicketTable.TICKET_TABLE, DSL.name("CONSTRAINT_5C"), new TableField[]{TicketTable.TICKET_TABLE.ROUTE_ID}, Keys.CONSTRAINT_4, new TableField[]{RouteTable.ROUTE_TABLE.ID}, true);
     public static final ForeignKey<TicketTableRecord, UserTableRecord> FK_TICKET_TABLE_PURCHASED_BY = Internal.createForeignKey(TicketTable.TICKET_TABLE, DSL.name("FK_TICKET_TABLE_PURCHASED_BY"), new TableField[]{TicketTable.TICKET_TABLE.PURCHASED_BY}, Keys.CONSTRAINT_C, new TableField[]{UserTable.USER_TABLE.LOGIN}, true);

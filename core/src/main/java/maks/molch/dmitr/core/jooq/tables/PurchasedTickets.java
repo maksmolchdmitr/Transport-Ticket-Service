@@ -54,6 +54,11 @@ public class PurchasedTickets extends TableImpl<PurchasedTicketsRecord> {
     }
 
     /**
+     * The column <code>PURCHASED_TICKETS.ID</code>.
+     */
+    public final TableField<PurchasedTicketsRecord, Integer> ID = createField(DSL.name("ID"), SQLDataType.INTEGER.nullable(false).identity(true), this, "");
+
+    /**
      * The column <code>PURCHASED_TICKETS.USER_LOGIN</code>.
      */
     public final TableField<PurchasedTicketsRecord, String> USER_LOGIN = createField(DSL.name("USER_LOGIN"), SQLDataType.VARCHAR(32).nullable(false), this, "");
@@ -107,11 +112,9 @@ public class PurchasedTickets extends TableImpl<PurchasedTicketsRecord> {
     public static class PurchasedTicketsPath extends PurchasedTickets implements Path<PurchasedTicketsRecord> {
 
         private static final long serialVersionUID = 1L;
-
         public <O extends Record> PurchasedTicketsPath(Table<O> path, ForeignKey<O, PurchasedTicketsRecord> childPath, InverseForeignKey<O, PurchasedTicketsRecord> parentPath) {
             super(path, childPath, parentPath);
         }
-
         private PurchasedTicketsPath(Name alias, Table<PurchasedTicketsRecord> aliased) {
             super(alias, aliased);
         }
@@ -140,8 +143,26 @@ public class PurchasedTickets extends TableImpl<PurchasedTicketsRecord> {
 
     @Override
     @NotNull
+    public Identity<PurchasedTicketsRecord, Integer> getIdentity() {
+        return (Identity<PurchasedTicketsRecord, Integer>) super.getIdentity();
+    }
+
+    @Override
+    @NotNull
+    public UniqueKey<PurchasedTicketsRecord> getPrimaryKey() {
+        return Keys.CONSTRAINT_F;
+    }
+
+    @Override
+    @NotNull
+    public List<UniqueKey<PurchasedTicketsRecord>> getUniqueKeys() {
+        return Arrays.asList(Keys.CONSTRAINT_F16B);
+    }
+
+    @Override
+    @NotNull
     public List<ForeignKey<PurchasedTicketsRecord, ?>> getReferences() {
-        return Arrays.asList(Keys.CONSTRAINT_F, Keys.CONSTRAINT_F1);
+        return Arrays.asList(Keys.CONSTRAINT_F1, Keys.CONSTRAINT_F16);
     }
 
     private transient UserTablePath _userTable;
@@ -151,7 +172,7 @@ public class PurchasedTickets extends TableImpl<PurchasedTicketsRecord> {
      */
     public UserTablePath userTable() {
         if (_userTable == null)
-            _userTable = new UserTablePath(this, Keys.CONSTRAINT_F, null);
+            _userTable = new UserTablePath(this, Keys.CONSTRAINT_F1, null);
 
         return _userTable;
     }
@@ -163,7 +184,7 @@ public class PurchasedTickets extends TableImpl<PurchasedTicketsRecord> {
      */
     public TicketTablePath ticketTable() {
         if (_ticketTable == null)
-            _ticketTable = new TicketTablePath(this, Keys.CONSTRAINT_F1, null);
+            _ticketTable = new TicketTablePath(this, Keys.CONSTRAINT_F16, null);
 
         return _ticketTable;
     }

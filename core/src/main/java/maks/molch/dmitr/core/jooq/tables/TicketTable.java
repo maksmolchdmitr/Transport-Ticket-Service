@@ -209,7 +209,7 @@ public class TicketTable extends TableImpl<TicketTableRecord> {
      */
     public PurchasedTicketsPath purchasedTickets() {
         if (_purchasedTickets == null)
-            _purchasedTickets = new PurchasedTicketsPath(this, null, Keys.CONSTRAINT_F1.getInverseKey());
+            _purchasedTickets = new PurchasedTicketsPath(this, null, Keys.CONSTRAINT_F16.getInverseKey());
 
         return _purchasedTickets;
     }

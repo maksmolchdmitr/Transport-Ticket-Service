@@ -6,6 +6,7 @@ package maks.molch.dmitr.core.jooq.tables.pojos;
 
 import jakarta.validation.constraints.Size;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.processing.Generated;
 import java.beans.ConstructorProperties;
@@ -28,6 +29,7 @@ public class PurchasedTickets implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    private Integer id;
     private String userLogin;
     private Integer ticketId;
     private LocalDateTime purchaseDatetime;
@@ -36,20 +38,38 @@ public class PurchasedTickets implements Serializable {
     }
 
     public PurchasedTickets(PurchasedTickets value) {
+        this.id = value.id;
         this.userLogin = value.userLogin;
         this.ticketId = value.ticketId;
         this.purchaseDatetime = value.purchaseDatetime;
     }
 
-    @ConstructorProperties({"userLogin", "ticketId", "purchaseDatetime"})
+    @ConstructorProperties({"id", "userLogin", "ticketId", "purchaseDatetime"})
     public PurchasedTickets(
+            @Nullable Integer id,
             @NotNull String userLogin,
             @NotNull Integer ticketId,
             @NotNull LocalDateTime purchaseDatetime
     ) {
+        this.id = id;
         this.userLogin = userLogin;
         this.ticketId = ticketId;
         this.purchaseDatetime = purchaseDatetime;
+    }
+
+    /**
+     * Getter for <code>PURCHASED_TICKETS.ID</code>.
+     */
+    @Nullable
+    public Integer getId() {
+        return this.id;
+    }
+
+    /**
+     * Setter for <code>PURCHASED_TICKETS.ID</code>.
+     */
+    public void setId(@Nullable Integer id) {
+        this.id = id;
     }
 
     /**
@@ -110,6 +130,11 @@ public class PurchasedTickets implements Serializable {
         if (getClass() != obj.getClass())
             return false;
         final PurchasedTickets other = (PurchasedTickets) obj;
+        if (this.id == null) {
+            if (other.id != null)
+                return false;
+        } else if (!this.id.equals(other.id))
+            return false;
         if (this.userLogin == null) {
             if (other.userLogin != null)
                 return false;
@@ -132,6 +157,7 @@ public class PurchasedTickets implements Serializable {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
+        result = prime * result + ((this.id == null) ? 0 : this.id.hashCode());
         result = prime * result + ((this.userLogin == null) ? 0 : this.userLogin.hashCode());
         result = prime * result + ((this.ticketId == null) ? 0 : this.ticketId.hashCode());
         result = prime * result + ((this.purchaseDatetime == null) ? 0 : this.purchaseDatetime.hashCode());
@@ -142,7 +168,8 @@ public class PurchasedTickets implements Serializable {
     public String toString() {
         StringBuilder sb = new StringBuilder("PurchasedTickets (");
 
-        sb.append(userLogin);
+        sb.append(id);
+        sb.append(", ").append(userLogin);
         sb.append(", ").append(ticketId);
         sb.append(", ").append(purchaseDatetime);
 
