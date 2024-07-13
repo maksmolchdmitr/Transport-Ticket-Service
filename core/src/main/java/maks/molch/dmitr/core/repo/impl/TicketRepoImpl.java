@@ -81,7 +81,7 @@ public class TicketRepoImpl implements TicketRepo {
     public List<Triple<TicketTableRecord, RouteTableRecord, CarrierTableRecord>> findAllSortByPrimaryKeyAndFiltered(TicketFilter ticketFilter) {
         return context
                 .select(
-                        ROUTE_TABLE.ID, TICKET_TABLE.DATE_AND_TIME, TICKET_TABLE.SEAT_NUMBER, TICKET_TABLE.PRICE,
+                        TICKET_TABLE.ID, TICKET_TABLE.ROUTE_ID, TICKET_TABLE.DATE_AND_TIME, TICKET_TABLE.SEAT_NUMBER, TICKET_TABLE.PRICE, TICKET_TABLE.PURCHASED_BY,
                         ROUTE_TABLE.ID, ROUTE_TABLE.DEPARTURE, ROUTE_TABLE.ARRIVAL, ROUTE_TABLE.CARRIER_NAME, ROUTE_TABLE.DURATION_IN_MINUTES, ROUTE_TABLE.SEAT_COUNT,
                         CARRIER_TABLE.NAME, CARRIER_TABLE.PHONE
                 )
@@ -96,9 +96,9 @@ public class TicketRepoImpl implements TicketRepo {
                 )
                 .fetch()
                 .map(record -> Triple.of(
-                        new TicketTableRecord(record.value1(), record.value2(), record.value3(), record.value4()),
-                        new RouteTableRecord(record.value5(), record.value6(), record.value7(), record.value8(), record.value9(), record.value10()),
-                        new CarrierTableRecord(record.value11(), record.value12())
+                        new TicketTableRecord(record.value1(), record.value2(), record.value3(), record.value4(), record.value5(), record.value6()),
+                        new RouteTableRecord(record.value7(), record.value8(), record.value9(), record.value10(), record.value11(), record.value12()),
+                        new CarrierTableRecord(record.value13(), record.value14())
                 ));
     }
 
