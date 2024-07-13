@@ -4,5 +4,6 @@ create table purchased_tickets
     ticket_id         int         not null,
     purchase_datetime timestamp   not null,
     foreign key (user_login) references user_table (login),
-    foreign key (ticket_id) references ticket_table (id)
+    foreign key (ticket_id) references ticket_table (id),
+    unique (user_login, ticket_id)
 );
