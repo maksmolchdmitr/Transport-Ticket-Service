@@ -1,8 +1,8 @@
 package maks.molch.dmitr.core.controller;
 
 import lombok.AllArgsConstructor;
-import maks.molch.dmitr.core.dto.TicketDto;
 import maks.molch.dmitr.core.dto.TicketCreateRequestDto;
+import maks.molch.dmitr.core.dto.TicketDto;
 import maks.molch.dmitr.core.dto.TicketPageDto;
 import maks.molch.dmitr.core.mapper.TicketMapper;
 import maks.molch.dmitr.core.service.TicketService;
@@ -10,7 +10,6 @@ import maks.molch.dmitr.core.service.filter.TicketFilter;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -23,9 +22,9 @@ public class TicketController {
 
     @GetMapping
     public TicketPageDto getTickets(
-            @DateTimeFormat(pattern = "dd.MM.yyyy HH:mm:ss")
+            @DateTimeFormat(pattern = "dd.MM.yyyy HH:mm")
             @RequestParam(value = "start_date_and_time_filter", required = false) LocalDateTime startDateAndTimeFilter,
-            @DateTimeFormat(pattern = "dd.MM.yyyy HH:mm:ss")
+            @DateTimeFormat(pattern = "dd.MM.yyyy HH:mm")
             @RequestParam(value = "end_date_and_time_filter", required = false) LocalDateTime endDateAndTimeFilter,
             @RequestParam(value = "departure_filter", required = false) String departureFilter,
             @RequestParam(value = "arrival_filter", required = false) String arrivalFilter,
@@ -34,8 +33,8 @@ public class TicketController {
             @RequestParam(value = "page_size", required = false, defaultValue = "10") Integer pageSize
     ) {
         var filter = new TicketFilter(
-                Optional.ofNullable(startDateAndTimeFilter).map(Timestamp::valueOf),
-                Optional.ofNullable(endDateAndTimeFilter).map(Timestamp::valueOf),
+                Optional.ofNullable(startDateAndTimeFilter),
+                Optional.ofNullable(endDateAndTimeFilter),
                 Optional.ofNullable(departureFilter),
                 Optional.ofNullable(arrivalFilter),
                 Optional.ofNullable(carrierNameFilter)

@@ -15,8 +15,6 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -37,10 +35,6 @@ public interface TicketMapper {
 
     FullTicket toFullTicket(TicketTableRecord ticketRecord, FullRoute fullRoute);
 
-    default Timestamp map(LocalDateTime value) {
-        return Timestamp.valueOf(value);
-    }
-
     Ticket toTicket(TicketTableRecord ticketTableRecord);
 
     default FullTicket toTicket(Triple<TicketTableRecord, RouteTableRecord, CarrierTableRecord> triple) {
@@ -59,7 +53,7 @@ public interface TicketMapper {
                         route.getDurationInMinutes(),
                         route.getSeatCount()
                 ),
-                Timestamp.valueOf(ticket.getDateAndTime()),
+                ticket.getDateAndTime(),
                 ticket.getSeatNumber(),
                 new BigDecimal(ticket.getPrice())
         );

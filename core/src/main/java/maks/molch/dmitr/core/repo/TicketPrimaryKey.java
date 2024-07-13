@@ -1,10 +1,10 @@
 package maks.molch.dmitr.core.repo;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 public record TicketPrimaryKey(
         Integer routeId,
-        Timestamp dateAndTime,
+        LocalDateTime dateAndTime,
         Integer seatNumber
 ) {
 }

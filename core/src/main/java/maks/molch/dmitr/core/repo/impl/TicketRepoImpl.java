@@ -17,9 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static maks.molch.dmitr.core.jooq.Tables.CARRIER_TABLE;
-import static maks.molch.dmitr.core.jooq.Tables.ROUTE_TABLE;
-import static maks.molch.dmitr.core.jooq.Tables.TICKET_TABLE;
+import static maks.molch.dmitr.core.jooq.Tables.*;
 
 @Repository
 @AllArgsConstructor
@@ -75,7 +73,7 @@ public class TicketRepoImpl implements TicketRepo {
 
     private static @NotNull Condition conditionByPrimaryKey(TicketPrimaryKey primaryKey) {
         return TICKET_TABLE.ROUTE_ID.eq(primaryKey.routeId())
-                .and(TICKET_TABLE.DATE_AND_TIME.eq(primaryKey.dateAndTime().toLocalDateTime()))
+                .and(TICKET_TABLE.DATE_AND_TIME.eq(primaryKey.dateAndTime()))
                 .and(TICKET_TABLE.SEAT_NUMBER.eq(primaryKey.seatNumber()));
     }
 
@@ -107,10 +105,10 @@ public class TicketRepoImpl implements TicketRepo {
     private List<Condition> toConditions(TicketFilter ticketFilter) {
         List<Condition> conditions = new ArrayList<>();
         ticketFilter.startDateAndTime().ifPresent(startDateAndTime -> conditions.add(
-                TICKET_TABLE.DATE_AND_TIME.greaterOrEqual(startDateAndTime.toLocalDateTime())
+                TICKET_TABLE.DATE_AND_TIME.greaterOrEqual(startDateAndTime)
         ));
         ticketFilter.endDateAndTime().ifPresent(endDateAndTime -> conditions.add(
-                TICKET_TABLE.DATE_AND_TIME.lessOrEqual(endDateAndTime.toLocalDateTime())
+                TICKET_TABLE.DATE_AND_TIME.lessOrEqual(endDateAndTime)
         ));
         ticketFilter.departure().ifPresent(departure -> conditions.add(
                 ROUTE_TABLE.DEPARTURE.likeIgnoreCase('%' + departure + '%')

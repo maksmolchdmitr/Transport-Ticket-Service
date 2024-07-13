@@ -9,3 +9,4 @@ spring:
   liquibase:
     enabled: true
 debug: false
+
