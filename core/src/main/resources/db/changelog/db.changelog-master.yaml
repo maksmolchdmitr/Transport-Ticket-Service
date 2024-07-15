@@ -12,3 +12,6 @@ databaseChangeLog:
       file: db/migrations/purchase/purchased_tickets-schema.sql
   - include:
       file: db/migrations/purchase/ticket-schema.sql
+
+  - include:
+      file: db/migrations/roles/user-schema.sql

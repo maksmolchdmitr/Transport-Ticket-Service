@@ -65,6 +65,11 @@ public class UserTable extends TableImpl<UserTableRecord> {
      */
     public final TableField<UserTableRecord, String> FULL_NAME = createField(DSL.name("FULL_NAME"), SQLDataType.VARCHAR(64).nullable(false), this, "");
 
+    /**
+     * The column <code>USER_TABLE.ROLE</code>.
+     */
+    public final TableField<UserTableRecord, String> ROLE = createField(DSL.name("ROLE"), SQLDataType.VARCHAR(32).nullable(false).defaultValue(DSL.field(DSL.raw("'USER'"), SQLDataType.VARCHAR)), this, "");
+
     private UserTable(Name alias, Table<UserTableRecord> aliased) {
         this(alias, aliased, (Field<?>[]) null, null);
     }

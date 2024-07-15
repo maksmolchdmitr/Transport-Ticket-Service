@@ -5,16 +5,14 @@ package maks.molch.dmitr.core.jooq.tables.records;
 
 
 import jakarta.validation.constraints.Size;
-
-import java.beans.ConstructorProperties;
-
-import javax.annotation.processing.Generated;
-
 import maks.molch.dmitr.core.jooq.tables.UserTable;
-
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jooq.Record1;
 import org.jooq.impl.UpdatableRecordImpl;
+
+import javax.annotation.processing.Generated;
+import java.beans.ConstructorProperties;
 
 
 /**
@@ -83,6 +81,22 @@ public class UserTableRecord extends UpdatableRecordImpl<UserTableRecord> {
         return (String) get(2);
     }
 
+    /**
+     * Setter for <code>USER_TABLE.ROLE</code>.
+     */
+    public void setRole(@Nullable String value) {
+        set(3, value);
+    }
+
+    /**
+     * Getter for <code>USER_TABLE.ROLE</code>.
+     */
+    @Size(max = 32)
+    @Nullable
+    public String getRole() {
+        return (String) get(3);
+    }
+
     // -------------------------------------------------------------------------
     // Primary key information
     // -------------------------------------------------------------------------
@@ -107,13 +121,14 @@ public class UserTableRecord extends UpdatableRecordImpl<UserTableRecord> {
     /**
      * Create a detached, initialised UserTableRecord
      */
-    @ConstructorProperties({ "login", "password", "fullName" })
-    public UserTableRecord(@NotNull String login, @NotNull String password, @NotNull String fullName) {
+    @ConstructorProperties({"login", "password", "fullName", "role"})
+    public UserTableRecord(@NotNull String login, @NotNull String password, @NotNull String fullName, @Nullable String role) {
         super(UserTable.USER_TABLE);
 
         setLogin(login);
         setPassword(password);
         setFullName(fullName);
+        setRole(role);
         resetChangedOnNotNull();
     }
 
@@ -127,6 +142,7 @@ public class UserTableRecord extends UpdatableRecordImpl<UserTableRecord> {
             setLogin(value.getLogin());
             setPassword(value.getPassword());
             setFullName(value.getFullName());
+            setRole(value.getRole());
             resetChangedOnNotNull();
         }
     }
