@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import static maks.molch.dmitr.core.jooq.Tables.PURCHASED_TICKETS_TABLE;
 
@@ -26,11 +27,11 @@ public class PurchasedTicketsRepoImpl implements PurchasedTicketsRepo {
     }
 
     @Override
-    public PurchasedTicketsTableRecord findById(PurchasedTicketsUniqueId id) {
-        return context
+    public Optional<PurchasedTicketsTableRecord> findById(PurchasedTicketsUniqueId id) {
+        return Optional.ofNullable(context
                 .selectFrom(PURCHASED_TICKETS_TABLE)
                 .where(conditionByUniqueId(id))
-                .fetchOne();
+                .fetchOne());
     }
 
     @Override

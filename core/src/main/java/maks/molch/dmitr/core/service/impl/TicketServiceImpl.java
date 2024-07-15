@@ -16,7 +16,6 @@ import org.jooq.exception.IntegrityConstraintViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 
 @Service
 @AllArgsConstructor
@@ -39,14 +38,10 @@ public class TicketServiceImpl implements TicketService {
     public FullTicket addTicket(Ticket ticket) {
         try {
             var ticketRecord = ticketMapper.toRecord(ticket);
-            var routerRecord = routeRepo.findById(ticket.routeId());
-            if (Objects.isNull(routerRecord)) {
-                throw new EntityNotFoundException("Router with such id not found");
-            }
-            var carrierRecord = carrierRepo.findById(routerRecord.getCarrierName());
-            if (Objects.isNull(carrierRecord)) {
-                throw new EntityNotFoundException("Carrier with such id not found");
-            }
+            var routerRecord = routeRepo.findById(ticket.routeId())
+                    .orElseThrow(() -> new EntityNotFoundException("Router with such id not found"));
+            var carrierRecord = carrierRepo.findById(routerRecord.getCarrierName())
+                    .orElseThrow(() -> new EntityNotFoundException("Carrier with such id not found"));
             var createdTicket = ticketRepo.save(ticketRecord);
             var fullRoute = routeMapper.toRoute(routerRecord, carrierRecord);
             return ticketMapper.toFullTicket(createdTicket, fullRoute);

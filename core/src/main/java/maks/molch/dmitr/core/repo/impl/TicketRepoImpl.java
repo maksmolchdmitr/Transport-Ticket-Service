@@ -16,6 +16,7 @@ import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import static maks.molch.dmitr.core.jooq.Tables.*;
 
@@ -32,11 +33,11 @@ public class TicketRepoImpl implements TicketRepo {
     }
 
     @Override
-    public TicketTableRecord findById(TicketUniqueId primaryKey) {
-        return context
+    public Optional<TicketTableRecord> findById(TicketUniqueId primaryKey) {
+        return Optional.ofNullable(context
                 .selectFrom(TICKET_TABLE)
                 .where(conditionByPrimaryKey(primaryKey))
-                .fetchOne();
+                .fetchOne());
     }
 
     @Override

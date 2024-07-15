@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Repository
 @AllArgsConstructor
@@ -23,11 +24,11 @@ public class UserRepoImpl implements UserRepo {
     }
 
     @Override
-    public UserTableRecord findById(String id) {
-        return context
+    public Optional<UserTableRecord> findById(String id) {
+        return Optional.ofNullable(context
                 .selectFrom(Tables.USER_TABLE)
                 .where(Tables.USER_TABLE.LOGIN.eq(id))
-                .fetchOne();
+                .fetchOne());
     }
 
     @Override

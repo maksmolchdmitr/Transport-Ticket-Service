@@ -14,7 +14,6 @@ import org.jooq.exception.IntegrityConstraintViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 
 @Service
 @AllArgsConstructor
@@ -27,10 +26,8 @@ public class RouteServiceImpl implements RouteService {
     public FullRoute addRoute(Route route) {
         try {
             var routeRecord = routeMapper.toRecord(route);
-            var carrierRecord = carrierRepo.findById(route.carrierName());
-            if (Objects.isNull(carrierRecord)) {
-                throw new EntityNotFoundException("Carrier with such id not found");
-            }
+            var carrierRecord = carrierRepo.findById(route.carrierName())
+                    .orElseThrow(() -> new EntityNotFoundException("Carrier with such id not found"));
             var createdRoute = routeRepo.save(routeRecord);
             return routeMapper.toRoute(createdRoute, carrierRecord);
         } catch (IntegrityConstraintViolationException e) {

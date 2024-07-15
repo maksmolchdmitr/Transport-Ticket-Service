@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Repository
 @AllArgsConstructor
@@ -23,11 +24,11 @@ public class CarrierRepoImpl implements CarrierRepo {
     }
 
     @Override
-    public CarrierTableRecord findById(String id) {
-        return context
+    public Optional<CarrierTableRecord> findById(String id) {
+        return Optional.ofNullable(context
                 .selectFrom(Tables.CARRIER_TABLE)
                 .where(Tables.CARRIER_TABLE.NAME.eq(id))
-                .fetchOne();
+                .fetchOne());
     }
 
     @Override

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import static maks.molch.dmitr.core.jooq.Tables.CARRIER_TABLE;
 import static maks.molch.dmitr.core.jooq.Tables.ROUTE_TABLE;
@@ -30,11 +31,11 @@ public class RouteRepoImpl implements RouteRepo {
     }
 
     @Override
-    public RouteTableRecord findById(Integer id) {
-        return context
+    public Optional<RouteTableRecord> findById(Integer id) {
+        return Optional.ofNullable(context
                 .selectFrom(ROUTE_TABLE)
                 .where(ROUTE_TABLE.ID.eq(id))
-                .fetchOne();
+                .fetchOne());
     }
 
     @Override
