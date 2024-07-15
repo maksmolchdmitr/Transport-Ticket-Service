@@ -1,4 +1,4 @@
-package maks.molch.dmitr.core.model;
+package maks.molch.dmitr.core.service.entity;
 
 public record Carrier(
         String name,

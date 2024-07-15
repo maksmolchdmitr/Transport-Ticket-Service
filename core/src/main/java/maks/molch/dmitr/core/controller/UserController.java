@@ -1,12 +1,12 @@
 package maks.molch.dmitr.core.controller;
 
 import lombok.AllArgsConstructor;
-import maks.molch.dmitr.core.controller.auth.AuthenticationService;
 import maks.molch.dmitr.core.dto.UserCreateRequestDto;
 import maks.molch.dmitr.core.dto.UserDto;
 import maks.molch.dmitr.core.dto.UserLoginDto;
 import maks.molch.dmitr.core.mapper.UserMapper;
 import maks.molch.dmitr.core.service.UserService;
+import maks.molch.dmitr.core.service.auth.AuthenticationService;
 import org.springframework.security.config.annotation.web.oauth2.login.OAuth2LoginSecurityMarker;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

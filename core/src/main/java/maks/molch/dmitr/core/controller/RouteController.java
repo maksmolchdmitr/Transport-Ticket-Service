@@ -5,8 +5,8 @@ import maks.molch.dmitr.core.dto.RouteDto;
 import maks.molch.dmitr.core.dto.RoutePageDto;
 import maks.molch.dmitr.core.dto.RouterCreateRequestDto;
 import maks.molch.dmitr.core.mapper.RouteMapper;
-import maks.molch.dmitr.core.model.FullRoute;
 import maks.molch.dmitr.core.service.RouteService;
+import maks.molch.dmitr.core.service.entity.FullRoute;
 import maks.molch.dmitr.core.service.filter.RouteFilter;
 import org.springframework.web.bind.annotation.*;
 

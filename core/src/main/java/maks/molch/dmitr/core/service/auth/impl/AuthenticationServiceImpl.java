@@ -1,8 +1,8 @@
-package maks.molch.dmitr.core.controller.auth.impl;
+package maks.molch.dmitr.core.service.auth.impl;
 
 import lombok.AllArgsConstructor;
-import maks.molch.dmitr.core.controller.auth.AuthenticationService;
-import maks.molch.dmitr.core.controller.auth.JwtService;
+import maks.molch.dmitr.core.service.auth.AuthenticationService;
+import maks.molch.dmitr.core.service.auth.JwtService;
 import maks.molch.dmitr.core.service.exception.AuthenticationException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

@@ -1,4 +1,4 @@
-package maks.molch.dmitr.core.controller.auth;
+package maks.molch.dmitr.core.service.auth;
 
 import maks.molch.dmitr.core.service.exception.AuthenticationException;
 

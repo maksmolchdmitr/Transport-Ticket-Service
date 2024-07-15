@@ -2,11 +2,11 @@ package maks.molch.dmitr.core.service.impl;
 
 import lombok.AllArgsConstructor;
 import maks.molch.dmitr.core.mapper.RouteMapper;
-import maks.molch.dmitr.core.model.FullRoute;
-import maks.molch.dmitr.core.model.Route;
 import maks.molch.dmitr.core.repo.CarrierRepo;
 import maks.molch.dmitr.core.repo.RouteRepo;
 import maks.molch.dmitr.core.service.RouteService;
+import maks.molch.dmitr.core.service.entity.FullRoute;
+import maks.molch.dmitr.core.service.entity.Route;
 import maks.molch.dmitr.core.service.exception.AlreadyExistException;
 import maks.molch.dmitr.core.service.exception.EntityNotFoundException;
 import maks.molch.dmitr.core.service.filter.RouteFilter;

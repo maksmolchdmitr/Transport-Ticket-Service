@@ -2,9 +2,9 @@ package maks.molch.dmitr.core.service.impl;
 
 import lombok.AllArgsConstructor;
 import maks.molch.dmitr.core.mapper.CarrierMapper;
-import maks.molch.dmitr.core.model.Carrier;
 import maks.molch.dmitr.core.repo.CarrierRepo;
 import maks.molch.dmitr.core.service.CarrierService;
+import maks.molch.dmitr.core.service.entity.Carrier;
 import maks.molch.dmitr.core.service.exception.AlreadyExistException;
 import org.jooq.exception.IntegrityConstraintViolationException;
 import org.springframework.stereotype.Service;

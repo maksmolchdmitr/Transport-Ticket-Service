@@ -1,4 +1,4 @@
-package maks.molch.dmitr.core.controller.auth.impl;
+package maks.molch.dmitr.core.service.auth.impl;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
@@ -6,8 +6,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
-import maks.molch.dmitr.core.controller.auth.JwtAuthorizationFilter;
-import maks.molch.dmitr.core.controller.auth.JwtService;
+import maks.molch.dmitr.core.service.auth.JwtAuthorizationFilter;
+import maks.molch.dmitr.core.service.auth.JwtService;
 import maks.molch.dmitr.core.service.exception.AuthenticationException;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpHeaders;

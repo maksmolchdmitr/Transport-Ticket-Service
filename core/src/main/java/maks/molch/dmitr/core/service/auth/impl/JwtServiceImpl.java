@@ -1,10 +1,10 @@
-package maks.molch.dmitr.core.controller.auth.impl;
+package maks.molch.dmitr.core.service.auth.impl;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.AllArgsConstructor;
 import maks.molch.dmitr.core.config.JwtConfig;
-import maks.molch.dmitr.core.controller.auth.JwtService;
+import maks.molch.dmitr.core.service.auth.JwtService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;

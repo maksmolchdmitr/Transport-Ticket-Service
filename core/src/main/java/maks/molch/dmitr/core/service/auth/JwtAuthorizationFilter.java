@@ -1,4 +1,4 @@
-package maks.molch.dmitr.core.controller.auth;
+package maks.molch.dmitr.core.service.auth;
 
 import org.springframework.web.filter.OncePerRequestFilter;
 

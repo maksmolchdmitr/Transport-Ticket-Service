@@ -2,9 +2,9 @@ package maks.molch.dmitr.core.service.impl;
 
 import lombok.AllArgsConstructor;
 import maks.molch.dmitr.core.mapper.UserMapper;
-import maks.molch.dmitr.core.model.User;
 import maks.molch.dmitr.core.repo.UserRepo;
 import maks.molch.dmitr.core.service.UserService;
+import maks.molch.dmitr.core.service.entity.User;
 import maks.molch.dmitr.core.service.exception.AlreadyExistException;
 import org.jooq.exception.IntegrityConstraintViolationException;
 import org.springframework.security.core.userdetails.UserDetails;

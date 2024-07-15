@@ -1,7 +1,7 @@
 package maks.molch.dmitr.core.service;
 
-import maks.molch.dmitr.core.model.FullRoute;
-import maks.molch.dmitr.core.model.Route;
+import maks.molch.dmitr.core.service.entity.FullRoute;
+import maks.molch.dmitr.core.service.entity.Route;
 import maks.molch.dmitr.core.service.filter.RouteFilter;
 
 import java.util.List;

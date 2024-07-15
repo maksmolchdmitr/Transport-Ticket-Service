@@ -1,7 +1,7 @@
 package maks.molch.dmitr.core.service;
 
-import maks.molch.dmitr.core.model.FullTicket;
-import maks.molch.dmitr.core.model.Ticket;
+import maks.molch.dmitr.core.service.entity.FullTicket;
+import maks.molch.dmitr.core.service.entity.Ticket;
 import maks.molch.dmitr.core.service.filter.TicketFilter;
 
 import java.util.List;

@@ -1,7 +1,7 @@
 package maks.molch.dmitr.core.config;
 
 import lombok.AllArgsConstructor;
-import maks.molch.dmitr.core.controller.auth.JwtAuthorizationFilter;
+import maks.molch.dmitr.core.service.auth.JwtAuthorizationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -14,7 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import static maks.molch.dmitr.core.model.User.Role.ADMIN;
+import static maks.molch.dmitr.core.service.entity.User.Role.ADMIN;
 import static org.springframework.http.HttpMethod.POST;
 
 @Configuration
