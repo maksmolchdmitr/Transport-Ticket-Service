@@ -8,6 +8,7 @@ import maks.molch.dmitr.core.jooq.DefaultSchema;
 import maks.molch.dmitr.core.jooq.Keys;
 import maks.molch.dmitr.core.jooq.tables.PurchasedTicketsTable.PurchasedTicketsTablePath;
 import maks.molch.dmitr.core.jooq.tables.TicketTable.TicketTablePath;
+import maks.molch.dmitr.core.jooq.tables.TokenTable.TokenTablePath;
 import maks.molch.dmitr.core.jooq.tables.records.UserTableRecord;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -58,7 +59,7 @@ public class UserTable extends TableImpl<UserTableRecord> {
     /**
      * The column <code>USER_TABLE.PASSWORD</code>.
      */
-    public final TableField<UserTableRecord, String> PASSWORD = createField(DSL.name("PASSWORD"), SQLDataType.VARCHAR(32).nullable(false), this, "");
+    public final TableField<UserTableRecord, String> PASSWORD = createField(DSL.name("PASSWORD"), SQLDataType.VARCHAR(1000000000).nullable(false), this, "");
 
     /**
      * The column <code>USER_TABLE.FULL_NAME</code>.
@@ -168,6 +169,19 @@ public class UserTable extends TableImpl<UserTableRecord> {
             _ticketTable = new TicketTablePath(this, null, Keys.FK_TICKET_TABLE_PURCHASED_BY.getInverseKey());
 
         return _ticketTable;
+    }
+
+    private transient TokenTablePath _tokenTable;
+
+    /**
+     * Get the implicit to-many join path to the <code>PUBLIC.TOKEN_TABLE</code>
+     * table
+     */
+    public TokenTablePath tokenTable() {
+        if (_tokenTable == null)
+            _tokenTable = new TokenTablePath(this, null, Keys.CONSTRAINT_727.getInverseKey());
+
+        return _tokenTable;
     }
 
     @Override

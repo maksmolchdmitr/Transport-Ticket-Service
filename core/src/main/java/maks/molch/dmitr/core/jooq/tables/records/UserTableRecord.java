@@ -58,7 +58,7 @@ public class UserTableRecord extends UpdatableRecordImpl<UserTableRecord> {
      * Getter for <code>USER_TABLE.PASSWORD</code>.
      */
     @jakarta.validation.constraints.NotNull
-    @Size(max = 32)
+    @Size(max = 1000000000)
     @NotNull
     public String getPassword() {
         return (String) get(1);

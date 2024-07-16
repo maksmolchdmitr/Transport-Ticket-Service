@@ -26,7 +26,6 @@ logging:
         security: TRACE
 application:
   jwt:
-    expireTimeInMinutes: 1
     privateKey:
       MIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQCb1HJYIc63G8+G
       hB8syEnMH/c3LWVHMEC+uYHfzeOHgsxCS29BOab/pr4jtj8yc9XdNARHq/UqRIyx
@@ -62,3 +61,5 @@ application:
       ElayWn9CsHn9dkduAG6ymkbl1Mozar+u818YgcuLuMBSaF5off+I0B46Wd9z9TxL
       kR9jP/sjwSttp9rUkr1Qump1BGCs63KsTHIQLmDBXTguqMnGJz0wYODfVMpsOdVw
       kQIDAQAB
+    expire-time-access-token-in-minutes: 5
+    expire-time-refresh-token-in-days: 2

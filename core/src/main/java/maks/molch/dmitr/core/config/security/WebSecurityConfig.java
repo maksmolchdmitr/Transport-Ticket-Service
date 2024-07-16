@@ -1,4 +1,4 @@
-package maks.molch.dmitr.core.config;
+package maks.molch.dmitr.core.config.security;
 
 import lombok.AllArgsConstructor;
 import maks.molch.dmitr.core.service.auth.JwtAuthorizationFilter;
@@ -22,6 +22,11 @@ import static org.springframework.http.HttpMethod.POST;
 @EnableMethodSecurity
 @AllArgsConstructor
 public class WebSecurityConfig {
+    public static final String[] AUTH_WHITELIST = {
+            "/user/login",
+            "/user/register"
+    };
+
     @Bean
     public SecurityFilterChain configure(HttpSecurity http, JwtAuthorizationFilter jwtAuthorizationFilter) throws Exception {
         return http
@@ -32,7 +37,7 @@ public class WebSecurityConfig {
                                 .sessionFixation().none()
                 )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/user/login", "/user/register").permitAll()
+                        .requestMatchers(AUTH_WHITELIST).permitAll()
                         .requestMatchers("/carrier").hasRole(ADMIN.name())
                         .requestMatchers(POST, "/route").hasRole(ADMIN.name())
                         .requestMatchers(POST, "/ticket").hasRole(ADMIN.name())

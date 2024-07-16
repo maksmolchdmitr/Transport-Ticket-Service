@@ -1,4 +1,4 @@
-package maks.molch.dmitr.core.config;
+package maks.molch.dmitr.core.config.security;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -6,6 +6,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public record JwtConfig(
         String privateKey,
         String publicKey,
-        Integer expireTimeInMinutes
+        Integer expireTimeAccessTokenInMinutes,
+        Integer expireTimeRefreshTokenInDays
 ) {
 }

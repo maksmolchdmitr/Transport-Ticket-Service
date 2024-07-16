@@ -76,7 +76,7 @@ public class UserTable implements Serializable {
      * Getter for <code>USER_TABLE.PASSWORD</code>.
      */
     @jakarta.validation.constraints.NotNull
-    @Size(max = 32)
+    @Size(max = 1000000000)
     @NotNull
     public String getPassword() {
         return this.password;

@@ -15,5 +15,5 @@
     <include file="purchase/purchased_tickets-schema.sql"/>
     <include file="purchase/ticket-schema.sql"/>
 
-    <include file="roles/user-schema.sql"/>
+    <includeAll path="roles"/>
 </databaseChangeLog>

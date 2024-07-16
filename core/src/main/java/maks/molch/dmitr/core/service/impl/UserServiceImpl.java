@@ -10,6 +10,7 @@ import org.jooq.exception.IntegrityConstraintViolationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,11 +18,12 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService, UserDetailsService {
     private final UserRepo userRepo;
     private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public User register(User user) throws AlreadyExistException {
         try {
-            var record = userMapper.toRecord(user);
+            var record = userMapper.toRecord(user, passwordEncoder);
             var createdRecord = userRepo.save(record);
             return userMapper.toUser(createdRecord);
         } catch (IntegrityConstraintViolationException e) {

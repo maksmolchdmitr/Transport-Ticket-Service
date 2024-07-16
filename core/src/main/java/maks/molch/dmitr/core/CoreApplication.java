@@ -1,7 +1,7 @@
 package maks.molch.dmitr.core;
 
 import maks.molch.dmitr.core.config.JooqContextConfig;
-import maks.molch.dmitr.core.config.JwtConfig;
+import maks.molch.dmitr.core.config.security.JwtConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

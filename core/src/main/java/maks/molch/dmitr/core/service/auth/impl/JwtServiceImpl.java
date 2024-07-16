@@ -3,7 +3,7 @@ package maks.molch.dmitr.core.service.auth.impl;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.AllArgsConstructor;
-import maks.molch.dmitr.core.config.JwtConfig;
+import maks.molch.dmitr.core.config.security.JwtConfig;
 import maks.molch.dmitr.core.service.auth.JwtService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -29,17 +29,30 @@ public class JwtServiceImpl implements JwtService {
     private final JwtConfig config;
 
     @Override
-    public String generateToken(Authentication authentication) {
+    public String generateAccessToken(Authentication authData) {
+        return generateToken(authData, Date.from(LocalDateTime.now()
+                .plusMinutes(config.expireTimeAccessTokenInMinutes())
+                .atZone(ZoneId.systemDefault())
+                .toInstant()));
+    }
+
+    @Override
+    public String generateRefreshToken(Authentication authData) {
+        return generateToken(authData, Date.from(LocalDateTime.now()
+                .plusDays(config.expireTimeRefreshTokenInDays())
+                .atZone(ZoneId.systemDefault())
+                .toInstant()));
+    }
+
+    private String generateToken(Authentication authData, Date expirationDate) {
         return Jwts.builder()
                 .signWith(getPrivateKey(), SignatureAlgorithm.RS256)
-                .claim("username", authentication.getName())
-                .claim("authorities", authentication.getAuthorities().stream()
+                .claim("username", authData.getName())
+                .claim("authorities", authData.getAuthorities().stream()
                         .map(GrantedAuthority::getAuthority)
                         .toList())
-                .setExpiration(Date.from(LocalDateTime.now()
-                        .plusMinutes(config.expireTimeInMinutes()).atZone(ZoneId.systemDefault())
-                        .toInstant()))
-                .setSubject(authentication.getName())
+                .setExpiration(expirationDate)
+                .setSubject(authData.getName())
                 .compact();
     }
 

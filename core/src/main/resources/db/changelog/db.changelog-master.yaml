@@ -13,5 +13,5 @@ databaseChangeLog:
   - include:
       file: db/migrations/purchase/ticket-schema.sql
 
-  - include:
-      file: db/migrations/roles/user-schema.sql
+  - includeAll:
+      path: db/migrations/roles
