@@ -1,6 +1,23 @@
 version: "3"
 
 services:
+  core:
+    build:
+      context: ./core
+      dockerfile: Dockerfile
+    image: core-service
+    environment:
+      POSTGRES_URL: jdbc:postgresql://postgresql:5432/core
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      JWT_PRIVATE_KEY: ${PRIV_KEY}
+      JWT_PUBLIC_KEY: ${PUB_KEY}
+    container_name: core-service
+    ports:
+      - "8080:8080"
+    networks:
+      - backend
+
   postgresql:
     image: postgres:15-alpine
     environment:
@@ -20,9 +37,9 @@ services:
       - postgresql
     command:
       - --hub-mode=off
-      - --changelog-file=master.xml
+      - --changelog-file=changelog/master.xml
       - --driver=org.postgresql.Driver
-      - --url=jdbc:postgresql://postgresql:5432/scrapper
+      - --url=jdbc:postgresql://postgresql:5432/core
       - --username=postgres
       - --password=postgres
       - update

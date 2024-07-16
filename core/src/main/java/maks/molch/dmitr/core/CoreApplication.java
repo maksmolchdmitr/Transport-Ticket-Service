@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
 @SpringBootApplication
-@EnableConfigurationProperties({JooqContextConfig.DataSourceConfig.class, JwtConfig.class})
+@EnableConfigurationProperties({JooqContextConfig.DataSourceConfig.class, JwtConfig.JwtConfigProperties.class})
 public class CoreApplication {
 
     public static void main(String[] args) {
