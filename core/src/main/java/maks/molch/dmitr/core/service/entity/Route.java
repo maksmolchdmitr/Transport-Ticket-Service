@@ -1,10 +1,9 @@
-package maks.molch.dmitr.core.model;
+package maks.molch.dmitr.core.service.entity;
 
-public record FullRoute(
-        int id,
+public record Route(
         String departure,
         String arrival,
-        Carrier carrier,
+        String carrierName,
         int durationInMinutes,
         int seatCount
 ) {

@@ -1,6 +1,6 @@
 package maks.molch.dmitr.core.service;
 
-import maks.molch.dmitr.core.model.User;
+import maks.molch.dmitr.core.service.entity.User;
 
 public interface UserService {
     User register(User user);

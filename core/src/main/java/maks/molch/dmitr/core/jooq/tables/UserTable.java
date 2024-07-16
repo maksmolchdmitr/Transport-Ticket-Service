@@ -8,6 +8,7 @@ import maks.molch.dmitr.core.jooq.DefaultSchema;
 import maks.molch.dmitr.core.jooq.Keys;
 import maks.molch.dmitr.core.jooq.tables.PurchasedTicketsTable.PurchasedTicketsTablePath;
 import maks.molch.dmitr.core.jooq.tables.TicketTable.TicketTablePath;
+import maks.molch.dmitr.core.jooq.tables.TokenTable.TokenTablePath;
 import maks.molch.dmitr.core.jooq.tables.records.UserTableRecord;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -58,12 +59,17 @@ public class UserTable extends TableImpl<UserTableRecord> {
     /**
      * The column <code>USER_TABLE.PASSWORD</code>.
      */
-    public final TableField<UserTableRecord, String> PASSWORD = createField(DSL.name("PASSWORD"), SQLDataType.VARCHAR(32).nullable(false), this, "");
+    public final TableField<UserTableRecord, String> PASSWORD = createField(DSL.name("PASSWORD"), SQLDataType.VARCHAR(1000000000).nullable(false), this, "");
 
     /**
      * The column <code>USER_TABLE.FULL_NAME</code>.
      */
     public final TableField<UserTableRecord, String> FULL_NAME = createField(DSL.name("FULL_NAME"), SQLDataType.VARCHAR(64).nullable(false), this, "");
+
+    /**
+     * The column <code>USER_TABLE.ROLE</code>.
+     */
+    public final TableField<UserTableRecord, String> ROLE = createField(DSL.name("ROLE"), SQLDataType.VARCHAR(32).nullable(false).defaultValue(DSL.field(DSL.raw("'USER'"), SQLDataType.VARCHAR)), this, "");
 
     private UserTable(Name alias, Table<UserTableRecord> aliased) {
         this(alias, aliased, (Field<?>[]) null, null);
@@ -163,6 +169,19 @@ public class UserTable extends TableImpl<UserTableRecord> {
             _ticketTable = new TicketTablePath(this, null, Keys.FK_TICKET_TABLE_PURCHASED_BY.getInverseKey());
 
         return _ticketTable;
+    }
+
+    private transient TokenTablePath _tokenTable;
+
+    /**
+     * Get the implicit to-many join path to the <code>PUBLIC.TOKEN_TABLE</code>
+     * table
+     */
+    public TokenTablePath tokenTable() {
+        if (_tokenTable == null)
+            _tokenTable = new TokenTablePath(this, null, Keys.CONSTRAINT_727.getInverseKey());
+
+        return _tokenTable;
     }
 
     @Override

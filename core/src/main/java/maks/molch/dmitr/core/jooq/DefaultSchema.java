@@ -56,6 +56,11 @@ public class DefaultSchema extends SchemaImpl {
     public final TicketTable TICKET_TABLE = TicketTable.TICKET_TABLE;
 
     /**
+     * The table <code>TOKEN_TABLE</code>.
+     */
+    public final TokenTable TOKEN_TABLE = TokenTable.TOKEN_TABLE;
+
+    /**
      * The table <code>USER_TABLE</code>.
      */
     public final UserTable USER_TABLE = UserTable.USER_TABLE;
@@ -82,6 +87,7 @@ public class DefaultSchema extends SchemaImpl {
                 PurchasedTicketsTable.PURCHASED_TICKETS_TABLE,
             RouteTable.ROUTE_TABLE,
             TicketTable.TICKET_TABLE,
+                TokenTable.TOKEN_TABLE,
             UserTable.USER_TABLE
         );
     }

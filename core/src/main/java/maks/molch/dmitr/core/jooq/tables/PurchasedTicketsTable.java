@@ -112,11 +112,9 @@ public class PurchasedTicketsTable extends TableImpl<PurchasedTicketsTableRecord
     public static class PurchasedTicketsTablePath extends PurchasedTicketsTable implements Path<PurchasedTicketsTableRecord> {
 
         private static final long serialVersionUID = 1L;
-
         public <O extends Record> PurchasedTicketsTablePath(Table<O> path, ForeignKey<O, PurchasedTicketsTableRecord> childPath, InverseForeignKey<O, PurchasedTicketsTableRecord> parentPath) {
             super(path, childPath, parentPath);
         }
-
         private PurchasedTicketsTablePath(Name alias, Table<PurchasedTicketsTableRecord> aliased) {
             super(alias, aliased);
         }

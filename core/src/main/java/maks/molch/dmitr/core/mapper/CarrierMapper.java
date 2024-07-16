@@ -2,7 +2,7 @@ package maks.molch.dmitr.core.mapper;
 
 import maks.molch.dmitr.core.dto.CarrierDto;
 import maks.molch.dmitr.core.jooq.tables.records.CarrierTableRecord;
-import maks.molch.dmitr.core.model.Carrier;
+import maks.molch.dmitr.core.service.entity.Carrier;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")

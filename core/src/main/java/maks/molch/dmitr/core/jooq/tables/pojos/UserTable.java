@@ -5,13 +5,12 @@ package maks.molch.dmitr.core.jooq.tables.pojos;
 
 
 import jakarta.validation.constraints.Size;
-
-import java.beans.ConstructorProperties;
-import java.io.Serializable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.processing.Generated;
-
-import org.jetbrains.annotations.NotNull;
+import java.beans.ConstructorProperties;
+import java.io.Serializable;
 
 
 /**
@@ -32,6 +31,7 @@ public class UserTable implements Serializable {
     private String login;
     private String password;
     private String fullName;
+    private String role;
 
     public UserTable() {}
 
@@ -39,17 +39,20 @@ public class UserTable implements Serializable {
         this.login = value.login;
         this.password = value.password;
         this.fullName = value.fullName;
+        this.role = value.role;
     }
 
-    @ConstructorProperties({ "login", "password", "fullName" })
+    @ConstructorProperties({"login", "password", "fullName", "role"})
     public UserTable(
         @NotNull String login,
         @NotNull String password,
-        @NotNull String fullName
+        @NotNull String fullName,
+        @Nullable String role
     ) {
         this.login = login;
         this.password = password;
         this.fullName = fullName;
+        this.role = role;
     }
 
     /**
@@ -73,7 +76,7 @@ public class UserTable implements Serializable {
      * Getter for <code>USER_TABLE.PASSWORD</code>.
      */
     @jakarta.validation.constraints.NotNull
-    @Size(max = 32)
+    @Size(max = 1000000000)
     @NotNull
     public String getPassword() {
         return this.password;
@@ -103,6 +106,22 @@ public class UserTable implements Serializable {
         this.fullName = fullName;
     }
 
+    /**
+     * Getter for <code>USER_TABLE.ROLE</code>.
+     */
+    @Size(max = 32)
+    @Nullable
+    public String getRole() {
+        return this.role;
+    }
+
+    /**
+     * Setter for <code>USER_TABLE.ROLE</code>.
+     */
+    public void setRole(@Nullable String role) {
+        this.role = role;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -130,6 +149,11 @@ public class UserTable implements Serializable {
         }
         else if (!this.fullName.equals(other.fullName))
             return false;
+        if (this.role == null) {
+            if (other.role != null)
+                return false;
+        } else if (!this.role.equals(other.role))
+            return false;
         return true;
     }
 
@@ -140,6 +164,7 @@ public class UserTable implements Serializable {
         result = prime * result + ((this.login == null) ? 0 : this.login.hashCode());
         result = prime * result + ((this.password == null) ? 0 : this.password.hashCode());
         result = prime * result + ((this.fullName == null) ? 0 : this.fullName.hashCode());
+        result = prime * result + ((this.role == null) ? 0 : this.role.hashCode());
         return result;
     }
 
@@ -150,6 +175,7 @@ public class UserTable implements Serializable {
         sb.append(login);
         sb.append(", ").append(password);
         sb.append(", ").append(fullName);
+        sb.append(", ").append(role);
 
         sb.append(")");
         return sb.toString();

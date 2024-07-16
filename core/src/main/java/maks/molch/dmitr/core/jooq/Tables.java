@@ -43,6 +43,11 @@ public class Tables {
     public static final TicketTable TICKET_TABLE = TicketTable.TICKET_TABLE;
 
     /**
+     * The table <code>TOKEN_TABLE</code>.
+     */
+    public static final TokenTable TOKEN_TABLE = TokenTable.TOKEN_TABLE;
+
+    /**
      * The table <code>USER_TABLE</code>.
      */
     public static final UserTable USER_TABLE = UserTable.USER_TABLE;
