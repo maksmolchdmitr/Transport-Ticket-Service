@@ -1,6 +1,7 @@
 package maks.molch.dmitr.core.service.auth.impl;
 
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.security.SignatureException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
@@ -47,7 +48,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             );
         } catch (UsernameNotFoundException e) {
             throw new EntityNotFoundException("Username not found!");
-        } catch (BadCredentialsException e) {
+        } catch (BadCredentialsException | SignatureException e) {
             throw new AuthenticationException("Bad credentials!");
         }
     }
