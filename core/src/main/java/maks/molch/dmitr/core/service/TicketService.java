@@ -17,4 +17,10 @@ public interface TicketService {
     List<TicketPurchase> getUserTicketPurchases(String userLogin);
 
     TicketPurchase getTicketPurchase(Integer ticketPurchaseId);
+
+    FullTicket getFullTicket(Integer id);
+
+    FullTicket updateTicket(int id, Ticket ticket);
+
+    void deleteTicket(Integer id);
 }

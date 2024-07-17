@@ -42,4 +42,27 @@ public class RouteServiceImpl implements RouteService {
         var toIndex = Math.min(pageNumber * pageSize + pageSize, fullRouteRecords.size());
         return routeMapper.toRoute(fullRouteRecords.subList(fromIndex, toIndex));
     }
+
+    @Override
+    public FullRoute getFullRoute(Integer id) {
+        var routeRecord = routeRepo.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Route with such id not found"));
+        var carrierRecord = carrierRepo.findById(routeRecord.getCarrierName())
+                .orElseThrow(() -> new EntityNotFoundException("Carrier with such id not found"));
+        return routeMapper.toRoute(routeRecord, carrierRecord);
+    }
+
+    @Override
+    public FullRoute updateRoute(int id, Route route) {
+        var routeRecord = routeMapper.toRecord(route);
+        routeRepo.update(routeRecord);
+        var carrierRecord = carrierRepo.findById(routeRecord.getCarrierName())
+                .orElseThrow(() -> new EntityNotFoundException("Carrier with such id not found"));
+        return routeMapper.toRoute(routeRecord, carrierRecord);
+    }
+
+    @Override
+    public void deleteRoute(Integer id) {
+        routeRepo.delete(id);
+    }
 }

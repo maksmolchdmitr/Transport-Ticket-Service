@@ -1,5 +1,6 @@
 package maks.molch.dmitr.core.mapper;
 
+import maks.molch.dmitr.core.dto.TicketUpdateRequestDto;
 import maks.molch.dmitr.core.dto.request.TicketCreateRequestDto;
 import maks.molch.dmitr.core.dto.response.PurchaseTicketResponseDto;
 import maks.molch.dmitr.core.dto.response.TicketPageDto;
@@ -8,7 +9,11 @@ import maks.molch.dmitr.core.jooq.tables.records.CarrierTableRecord;
 import maks.molch.dmitr.core.jooq.tables.records.PurchasedTicketsTableRecord;
 import maks.molch.dmitr.core.jooq.tables.records.RouteTableRecord;
 import maks.molch.dmitr.core.jooq.tables.records.TicketTableRecord;
-import maks.molch.dmitr.core.service.entity.*;
+import maks.molch.dmitr.core.service.entity.Carrier;
+import maks.molch.dmitr.core.service.entity.FullRoute;
+import maks.molch.dmitr.core.service.entity.FullTicket;
+import maks.molch.dmitr.core.service.entity.Ticket;
+import maks.molch.dmitr.core.service.entity.TicketPurchase;
 import org.apache.commons.lang3.tuple.Triple;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -76,4 +81,8 @@ public interface TicketMapper {
     List<PurchaseTicketResponseDto> toPurchaseDto(List<TicketPurchase> ticketPurchases);
 
     TicketPurchase toPurchase(PurchasedTicketsTableRecord purchase);
+
+    Ticket toTicket(TicketUpdateRequestDto updateRequestDto);
+
+    TicketTableRecord toRecord(int id, Ticket ticket);
 }
