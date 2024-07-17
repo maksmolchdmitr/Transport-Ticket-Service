@@ -1,22 +1,22 @@
 version: "3"
 
 services:
-  core:
-    build:
-      context: ./core
-      dockerfile: Dockerfile
-    image: core-service
-    environment:
-      POSTGRES_URL: jdbc:postgresql://postgresql:5432/core
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      JWT_PRIVATE_KEY: ${PRIV_KEY}
-      JWT_PUBLIC_KEY: ${PUB_KEY}
-    container_name: core-service
-    ports:
-      - "8080:8080"
-    networks:
-      - backend
+  #  core:
+  #    build:
+  #      context: ./core
+  #      dockerfile: Dockerfile
+  #    image: core-service
+  #    environment:
+  #      POSTGRES_URL: jdbc:postgresql://postgresql:5432/core
+  #      POSTGRES_USER: postgres
+  #      POSTGRES_PASSWORD: postgres
+  #      JWT_PRIVATE_KEY: ${PRIV_KEY}
+  #      JWT_PUBLIC_KEY: ${PUB_KEY}
+  #    container_name: core-service
+  #    ports:
+  #      - "8080:8080"
+  #    networks:
+  #      - backend
 
   postgresql:
     image: postgres:15-alpine

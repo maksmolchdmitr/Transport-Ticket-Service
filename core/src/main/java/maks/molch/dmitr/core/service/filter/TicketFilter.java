@@ -8,6 +8,7 @@ public record TicketFilter(
         Optional<LocalDateTime> endDateAndTime,
         Optional<String> departure,
         Optional<String> arrival,
-        Optional<String> carrierName
+        Optional<String> carrierName,
+        boolean withoutPurchased
 ) {
 }

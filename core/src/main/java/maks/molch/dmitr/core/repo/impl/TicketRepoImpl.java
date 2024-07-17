@@ -99,6 +99,15 @@ public class TicketRepoImpl implements TicketRepo {
         return count > 0;
     }
 
+    @Override
+    public void setPurchasedById(int ticketId, String userLogin) {
+        context
+                .update(TICKET_TABLE)
+                .set(TICKET_TABLE.PURCHASED_BY, userLogin)
+                .where(conditionById(ticketId))
+                .execute();
+    }
+
     private static @NotNull Condition conditionById(Integer id) {
         return TICKET_TABLE.ID.eq(id);
     }
@@ -151,6 +160,11 @@ public class TicketRepoImpl implements TicketRepo {
         ticketFilter.carrierName().ifPresent(carrierName -> conditions.add(
                 ROUTE_TABLE.CARRIER_NAME.likeIgnoreCase('%' + carrierName + '%')
         ));
+        if (ticketFilter.withoutPurchased()) {
+            conditions.add(
+                    TICKET_TABLE.PURCHASED_BY.isNull()
+            );
+        }
         return conditions;
     }
 }

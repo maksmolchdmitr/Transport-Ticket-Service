@@ -56,12 +56,13 @@ public class TicketServiceImpl implements TicketService {
         try {
             var ticketRecord = ticketRepo.findById(ticketId)
                     .orElseThrow(() -> new EntityNotFoundException("Ticket with such id not found"));
+            userRepo.findById(userLogin)
+                    .orElseThrow(() -> new EntityNotFoundException("User with such id not found"));
+            ticketRepo.setPurchasedById(ticketId, userLogin);
             var routeRecord = routeRepo.findById(ticketRecord.getRouteId())
                     .orElseThrow(() -> new EntityNotFoundException("Route with such id not found"));
             var carrierRecord = carrierRepo.findById(routeRecord.getCarrierName())
                     .orElseThrow(() -> new EntityNotFoundException("Carrier with such id not found"));
-            userRepo.findById(userLogin)
-                    .orElseThrow(() -> new EntityNotFoundException("User with such id not found"));
             var purchaseRecord = purchasedTicketsRepo.save(ticketMapper.toPurchaseRecord(ticketId, userLogin));
             var fullRoute = routeMapper.toRoute(routeRecord, carrierRecord);
             var fullTicket = ticketMapper.toFullTicket(ticketRecord, fullRoute);

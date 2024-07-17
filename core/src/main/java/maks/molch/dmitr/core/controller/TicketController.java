@@ -38,7 +38,8 @@ public class TicketController {
                 Optional.ofNullable(endDateAndTimeFilter),
                 Optional.ofNullable(departureFilter),
                 Optional.ofNullable(arrivalFilter),
-                Optional.ofNullable(carrierNameFilter)
+                Optional.ofNullable(carrierNameFilter),
+                true
         );
         var page = ticketService.getTicketsPage(pageNumber, pageSize, filter);
         return ticketMapper.toPageDto(page, pageNumber, pageSize);

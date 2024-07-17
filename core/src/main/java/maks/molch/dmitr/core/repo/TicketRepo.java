@@ -17,4 +17,6 @@ public interface TicketRepo extends JooqRepo<TicketTableRecord, Integer> {
     void delete(TicketUniqueId primaryKey);
 
     boolean exist(TicketUniqueId primaryKey);
+
+    void setPurchasedById(int ticketId, String userLogin);
 }
