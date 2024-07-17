@@ -1,9 +1,9 @@
-package maks.molch.dmitr.core.dto;
+package maks.molch.dmitr.core.dto.response;
 
 import java.util.List;
 
 public record RoutePageDto(
-        List<RouteDto> routes,
+        List<RouteResponseDto> routes,
         int pageNumber,
         int pageSize
 ) {

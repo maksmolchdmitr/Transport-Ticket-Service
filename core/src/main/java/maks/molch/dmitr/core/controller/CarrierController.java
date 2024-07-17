@@ -1,5 +1,6 @@
 package maks.molch.dmitr.core.controller;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import maks.molch.dmitr.core.dto.CarrierDto;
 import maks.molch.dmitr.core.mapper.CarrierMapper;
@@ -18,7 +19,7 @@ public class CarrierController {
     private final CarrierMapper carrierMapper;
 
     @PostMapping
-    public CarrierDto addCarrier(@RequestBody CarrierDto dto) {
+    public CarrierDto addCarrier(@Valid @RequestBody CarrierDto dto) {
         var carrier = carrierMapper.toCarrier(dto);
         Carrier createdCarrier = carrierService.addCarrier(carrier);
         return carrierMapper.toDto(createdCarrier);

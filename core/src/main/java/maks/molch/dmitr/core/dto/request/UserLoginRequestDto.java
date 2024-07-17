@@ -1,8 +1,8 @@
-package maks.molch.dmitr.core.dto;
+package maks.molch.dmitr.core.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public record UserLoginDto(
+public record UserLoginRequestDto(
         @JsonProperty("login")
         String login,
         @JsonProperty("password")

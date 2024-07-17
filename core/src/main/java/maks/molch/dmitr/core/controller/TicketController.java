@@ -1,9 +1,10 @@
 package maks.molch.dmitr.core.controller;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import maks.molch.dmitr.core.dto.TicketCreateRequestDto;
-import maks.molch.dmitr.core.dto.TicketDto;
-import maks.molch.dmitr.core.dto.TicketPageDto;
+import maks.molch.dmitr.core.dto.request.TicketCreateRequestDto;
+import maks.molch.dmitr.core.dto.response.TicketPageDto;
+import maks.molch.dmitr.core.dto.response.TicketResponseDto;
 import maks.molch.dmitr.core.mapper.TicketMapper;
 import maks.molch.dmitr.core.service.TicketService;
 import maks.molch.dmitr.core.service.filter.TicketFilter;
@@ -44,7 +45,7 @@ public class TicketController {
     }
 
     @PostMapping
-    public TicketDto addTicket(@RequestBody TicketCreateRequestDto createRequestDto) {
+    public TicketResponseDto addTicket(@Valid @RequestBody TicketCreateRequestDto createRequestDto) {
         var ticket = ticketMapper.toTicket(createRequestDto);
         var fullCreatedTicket = ticketService.addTicket(ticket);
         return ticketMapper.toDto(fullCreatedTicket);

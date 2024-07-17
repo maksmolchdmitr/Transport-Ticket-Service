@@ -1,8 +1,8 @@
 package maks.molch.dmitr.core.mapper;
 
-import maks.molch.dmitr.core.dto.RouteDto;
-import maks.molch.dmitr.core.dto.RoutePageDto;
-import maks.molch.dmitr.core.dto.RouterCreateRequestDto;
+import maks.molch.dmitr.core.dto.request.RouteCreateRequestDto;
+import maks.molch.dmitr.core.dto.response.RoutePageDto;
+import maks.molch.dmitr.core.dto.response.RouteResponseDto;
 import maks.molch.dmitr.core.jooq.tables.records.CarrierTableRecord;
 import maks.molch.dmitr.core.jooq.tables.records.RouteTableRecord;
 import maks.molch.dmitr.core.service.entity.Carrier;
@@ -17,11 +17,11 @@ import java.util.Objects;
 
 @Mapper(componentModel = "spring")
 public interface RouteMapper {
-    FullRoute toRoute(RouteDto dto);
+    FullRoute toRoute(RouteResponseDto dto);
 
-    RouteDto toDto(FullRoute fullRoute);
+    RouteResponseDto toDto(FullRoute fullRoute);
 
-    Route toRoute(RouterCreateRequestDto createRequestDto);
+    Route toRoute(RouteCreateRequestDto createRequestDto);
 
     @Mapping(source = "carrierRecord", target = "carrier")
     FullRoute toRoute(RouteTableRecord routeRecord, CarrierTableRecord carrierRecord);

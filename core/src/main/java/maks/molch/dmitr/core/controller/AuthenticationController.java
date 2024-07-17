@@ -3,7 +3,7 @@ package maks.molch.dmitr.core.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
-import maks.molch.dmitr.core.dto.AuthenticationResponseDto;
+import maks.molch.dmitr.core.dto.response.AuthenticationResponseDto;
 import maks.molch.dmitr.core.mapper.TokenMapper;
 import maks.molch.dmitr.core.service.auth.AuthenticationService;
 import org.springframework.web.bind.annotation.PostMapping;

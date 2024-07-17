@@ -1,9 +1,10 @@
 package maks.molch.dmitr.core.controller;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import maks.molch.dmitr.core.dto.RouteDto;
-import maks.molch.dmitr.core.dto.RoutePageDto;
-import maks.molch.dmitr.core.dto.RouterCreateRequestDto;
+import maks.molch.dmitr.core.dto.request.RouteCreateRequestDto;
+import maks.molch.dmitr.core.dto.response.RoutePageDto;
+import maks.molch.dmitr.core.dto.response.RouteResponseDto;
 import maks.molch.dmitr.core.mapper.RouteMapper;
 import maks.molch.dmitr.core.service.RouteService;
 import maks.molch.dmitr.core.service.entity.FullRoute;
@@ -20,7 +21,7 @@ public class RouteController {
     private final RouteService routeService;
 
     @PostMapping
-    public RouteDto route(@RequestBody RouterCreateRequestDto createRequestDto) {
+    public RouteResponseDto route(@Valid @RequestBody RouteCreateRequestDto createRequestDto) {
         var route = routeMapper.toRoute(createRequestDto);
         FullRoute fullRoute = routeService.addRoute(route);
         return routeMapper.toDto(fullRoute);

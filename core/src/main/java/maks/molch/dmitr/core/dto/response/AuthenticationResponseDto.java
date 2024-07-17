@@ -1,4 +1,4 @@
-package maks.molch.dmitr.core.dto;
+package maks.molch.dmitr.core.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

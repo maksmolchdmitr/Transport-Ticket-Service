@@ -1,9 +1,9 @@
 package maks.molch.dmitr.core.mapper;
 
-import maks.molch.dmitr.core.dto.PurchaseTicketDto;
-import maks.molch.dmitr.core.dto.TicketCreateRequestDto;
-import maks.molch.dmitr.core.dto.TicketDto;
-import maks.molch.dmitr.core.dto.TicketPageDto;
+import maks.molch.dmitr.core.dto.request.TicketCreateRequestDto;
+import maks.molch.dmitr.core.dto.response.PurchaseTicketResponseDto;
+import maks.molch.dmitr.core.dto.response.TicketPageDto;
+import maks.molch.dmitr.core.dto.response.TicketResponseDto;
 import maks.molch.dmitr.core.jooq.tables.records.CarrierTableRecord;
 import maks.molch.dmitr.core.jooq.tables.records.PurchasedTicketsTableRecord;
 import maks.molch.dmitr.core.jooq.tables.records.RouteTableRecord;
@@ -20,10 +20,10 @@ import java.util.Objects;
 @Mapper(componentModel = "spring")
 public interface TicketMapper {
 
-    FullTicket toFullTicket(TicketDto dto);
+    FullTicket toFullTicket(TicketResponseDto dto);
 
     @Mapping(source = "fullTicket.fullRoute", target = "route")
-    TicketDto toDto(FullTicket fullTicket);
+    TicketResponseDto toDto(FullTicket fullTicket);
 
     @Mapping(source = "fullTicketPage", target = "tickets")
     TicketPageDto toPageDto(List<FullTicket> fullTicketPage, int pageNumber, int pageSize);
@@ -62,7 +62,7 @@ public interface TicketMapper {
 
     List<FullTicket> toTickets(List<Triple<TicketTableRecord, RouteTableRecord, CarrierTableRecord>> triples);
 
-    PurchaseTicketDto toPurchaseDto(TicketPurchase ticketPurchase);
+    PurchaseTicketResponseDto toPurchaseDto(TicketPurchase ticketPurchase);
 
     @Mapping(target = "purchaseDatetime", expression = "java(LocalDateTime.now())")
     PurchasedTicketsTableRecord toPurchaseRecord(int ticketId, String userLogin);
@@ -73,7 +73,7 @@ public interface TicketMapper {
 
     List<TicketPurchase> toPurchase(List<PurchasedTicketsTableRecord> ticketPurchases);
 
-    List<PurchaseTicketDto> toPurchaseDto(List<TicketPurchase> ticketPurchases);
+    List<PurchaseTicketResponseDto> toPurchaseDto(List<TicketPurchase> ticketPurchases);
 
     TicketPurchase toPurchase(PurchasedTicketsTableRecord purchase);
 }
