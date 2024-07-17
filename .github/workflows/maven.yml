@@ -19,6 +19,10 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    env:
+      PRIV_KEY: ${{ secrets.PRIV_KEY }}
+      PUB_KEY: ${{ secrets.PUB_KEY }}
+
     steps:
     - uses: actions/checkout@v4
     - name: Set up JDK 21
