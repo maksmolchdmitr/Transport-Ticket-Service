@@ -70,4 +70,10 @@ public interface TicketMapper {
     @Mapping(source = "fullTicket", target = "ticket")
     @Mapping(source = "purchaseRecord.id", target = "id")
     TicketPurchase toPurchase(PurchasedTicketsTableRecord purchaseRecord, FullTicket fullTicket, String userLogin);
+
+    List<TicketPurchase> toPurchase(List<PurchasedTicketsTableRecord> ticketPurchases);
+
+    List<PurchaseTicketDto> toPurchaseDto(List<TicketPurchase> ticketPurchases);
+
+    TicketPurchase toPurchase(PurchasedTicketsTableRecord purchase);
 }

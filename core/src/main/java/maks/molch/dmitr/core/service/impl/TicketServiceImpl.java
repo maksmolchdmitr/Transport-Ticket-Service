@@ -70,4 +70,27 @@ public class TicketServiceImpl implements TicketService {
             throw new AlreadyExistException("Such ticket already purchased!");
         }
     }
+
+    @Override
+    public List<TicketPurchase> getUserTicketPurchases(String userLogin) {
+        userRepo.findById(userLogin)
+                .orElseThrow(() -> new EntityNotFoundException("User with such id not found"));
+        var ticketPurchases = purchasedTicketsRepo.findAllByUserId(userLogin);
+        return ticketMapper.toPurchase(ticketPurchases);
+    }
+
+    @Override
+    public TicketPurchase getTicketPurchase(Integer ticketPurchaseId) {
+        var purchase = purchasedTicketsRepo.findById(ticketPurchaseId)
+                .orElseThrow(() -> new EntityNotFoundException("Purchase with such id not found"));
+        var tickerRecord = ticketRepo.findById(purchase.getTicketId())
+                .orElseThrow(() -> new EntityNotFoundException("Ticket with such id not found"));
+        var routeRecord = routeRepo.findById(tickerRecord.getRouteId())
+                .orElseThrow(() -> new EntityNotFoundException("Route with such id not found"));
+        var carrierRecord = carrierRepo.findById(routeRecord.getCarrierName())
+                .orElseThrow(() -> new EntityNotFoundException("Carrier with such id not found"));
+        var fullRout = routeMapper.toRoute(routeRecord, carrierRecord);
+        var fullTicket = ticketMapper.toFullTicket(tickerRecord, fullRout);
+        return ticketMapper.toPurchase(purchase, fullTicket, purchase.getUserLogin());
+    }
 }
