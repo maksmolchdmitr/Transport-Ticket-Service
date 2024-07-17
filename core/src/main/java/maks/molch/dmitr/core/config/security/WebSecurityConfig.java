@@ -15,7 +15,9 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import static maks.molch.dmitr.core.service.entity.User.Role.ADMIN;
+import static org.springframework.http.HttpMethod.DELETE;
 import static org.springframework.http.HttpMethod.POST;
+import static org.springframework.http.HttpMethod.PUT;
 
 @Configuration
 @EnableWebSecurity
@@ -38,9 +40,9 @@ public class WebSecurityConfig {
                 )
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(AUTH_WHITELIST).permitAll()
-                        .requestMatchers("/carrier").hasRole(ADMIN.name())
-                        .requestMatchers(POST, "/route").hasRole(ADMIN.name())
-                        .requestMatchers(POST, "/ticket").hasRole(ADMIN.name())
+                        .requestMatchers(POST, "/ticket", "/route", "/carrier").hasRole(ADMIN.name())
+                        .requestMatchers(PUT, "/ticket", "/route", "/carrier").hasRole(ADMIN.name())
+                        .requestMatchers(DELETE, "/ticket/**", "/route/**", "/carrier/**").hasRole(ADMIN.name())
                         .anyRequest().authenticated()
                 )
                 .csrf(AbstractHttpConfigurer::disable)
