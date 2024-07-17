@@ -33,6 +33,14 @@ public class TicketRepoImpl implements TicketRepo {
     }
 
     @Override
+    public Optional<TicketTableRecord> findById(Integer id) {
+        return context
+                .selectFrom(TICKET_TABLE)
+                .where(conditionById(id))
+                .fetchOptional();
+    }
+
+    @Override
     public Optional<TicketTableRecord> findById(TicketUniqueId primaryKey) {
         return Optional.ofNullable(context
                 .selectFrom(TICKET_TABLE)
@@ -42,9 +50,11 @@ public class TicketRepoImpl implements TicketRepo {
 
     @Override
     public TicketTableRecord save(TicketTableRecord entity) {
-        var ticket = context.newRecord(TICKET_TABLE, entity);
-        ticket.store();
-        return ticket;
+        return context
+                .insertInto(TICKET_TABLE)
+                .set(entity)
+                .returning()
+                .fetchOne();
     }
 
     @Override
@@ -52,6 +62,23 @@ public class TicketRepoImpl implements TicketRepo {
         var ticket = context.newRecord(TICKET_TABLE, entity);
         ticket.update();
         return ticket;
+    }
+
+    @Override
+    public void delete(Integer id) {
+        context
+                .deleteFrom(TICKET_TABLE)
+                .where(conditionById(id))
+                .execute();
+    }
+
+    @Override
+    public boolean exist(Integer id) {
+        var count = Objects.requireNonNullElse(context
+                .selectCount()
+                .where(conditionById(id))
+                .fetchOne(0, Integer.class), 0);
+        return count > 0;
     }
 
     @Override
@@ -70,6 +97,10 @@ public class TicketRepoImpl implements TicketRepo {
                 .where(conditionByPrimaryKey(primaryKey))
                 .fetchOne(0, Integer.class), 0);
         return count > 0;
+    }
+
+    private static @NotNull Condition conditionById(Integer id) {
+        return TICKET_TABLE.ID.eq(id);
     }
 
     private static @NotNull Condition conditionByPrimaryKey(TicketUniqueId primaryKey) {

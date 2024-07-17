@@ -1,15 +1,14 @@
 package maks.molch.dmitr.core.mapper;
 
+import maks.molch.dmitr.core.dto.PurchaseTicketDto;
 import maks.molch.dmitr.core.dto.TicketCreateRequestDto;
 import maks.molch.dmitr.core.dto.TicketDto;
 import maks.molch.dmitr.core.dto.TicketPageDto;
 import maks.molch.dmitr.core.jooq.tables.records.CarrierTableRecord;
+import maks.molch.dmitr.core.jooq.tables.records.PurchasedTicketsTableRecord;
 import maks.molch.dmitr.core.jooq.tables.records.RouteTableRecord;
 import maks.molch.dmitr.core.jooq.tables.records.TicketTableRecord;
-import maks.molch.dmitr.core.service.entity.Carrier;
-import maks.molch.dmitr.core.service.entity.FullRoute;
-import maks.molch.dmitr.core.service.entity.FullTicket;
-import maks.molch.dmitr.core.service.entity.Ticket;
+import maks.molch.dmitr.core.service.entity.*;
 import org.apache.commons.lang3.tuple.Triple;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -33,6 +32,7 @@ public interface TicketMapper {
 
     TicketTableRecord toRecord(Ticket ticket);
 
+    @Mapping(source = "ticketRecord.id", target = "id")
     FullTicket toFullTicket(TicketTableRecord ticketRecord, FullRoute fullRoute);
 
     Ticket toTicket(TicketTableRecord ticketTableRecord);
@@ -42,6 +42,7 @@ public interface TicketMapper {
         var route = triple.getMiddle();
         var carrier = triple.getRight();
         return new FullTicket(
+                Objects.requireNonNull(ticket.getId()),
                 new FullRoute(
                         Objects.requireNonNull(route.getId()),
                         route.getDeparture(),
@@ -61,4 +62,12 @@ public interface TicketMapper {
 
     List<FullTicket> toTickets(List<Triple<TicketTableRecord, RouteTableRecord, CarrierTableRecord>> triples);
 
+    PurchaseTicketDto toPurchaseDto(TicketPurchase ticketPurchase);
+
+    @Mapping(target = "purchaseDatetime", expression = "java(LocalDateTime.now())")
+    PurchasedTicketsTableRecord toPurchaseRecord(int ticketId, String userLogin);
+
+    @Mapping(source = "fullTicket", target = "ticket")
+    @Mapping(source = "purchaseRecord.id", target = "id")
+    TicketPurchase toPurchase(PurchasedTicketsTableRecord purchaseRecord, FullTicket fullTicket, String userLogin);
 }
