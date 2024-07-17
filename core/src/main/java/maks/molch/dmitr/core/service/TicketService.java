@@ -13,4 +13,8 @@ public interface TicketService {
     FullTicket addTicket(Ticket ticket);
 
     TicketPurchase purchase(int ticketId, String userLogin);
+
+    List<TicketPurchase> getUserTicketPurchases(String userLogin);
+
+    TicketPurchase getTicketPurchase(Integer ticketPurchaseId);
 }

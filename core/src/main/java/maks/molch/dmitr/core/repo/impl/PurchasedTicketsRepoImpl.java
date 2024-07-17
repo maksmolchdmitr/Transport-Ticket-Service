@@ -27,6 +27,14 @@ public class PurchasedTicketsRepoImpl implements PurchasedTicketsRepo {
     }
 
     @Override
+    public Optional<PurchasedTicketsTableRecord> findById(Integer id) {
+        return context
+                .selectFrom(PURCHASED_TICKETS_TABLE)
+                .where(PURCHASED_TICKETS_TABLE.ID.eq(id))
+                .fetchOptional();
+    }
+
+    @Override
     public Optional<PurchasedTicketsTableRecord> findById(PurchasedTicketsUniqueId id) {
         return Optional.ofNullable(context
                 .selectFrom(PURCHASED_TICKETS_TABLE)
@@ -51,6 +59,23 @@ public class PurchasedTicketsRepoImpl implements PurchasedTicketsRepo {
     }
 
     @Override
+    public void delete(Integer id) {
+        context
+                .deleteFrom(PURCHASED_TICKETS_TABLE)
+                .where(PURCHASED_TICKETS_TABLE.ID.eq(id))
+                .execute();
+    }
+
+    @Override
+    public boolean exist(Integer id) {
+        var count = Objects.requireNonNullElse(context
+                .selectCount()
+                .where(PURCHASED_TICKETS_TABLE.ID.eq(id))
+                .fetchOne(0, Integer.class), 0);
+        return count > 0;
+    }
+
+    @Override
     public void delete(PurchasedTicketsUniqueId id) {
         context
                 .deleteFrom(PURCHASED_TICKETS_TABLE)
@@ -71,5 +96,13 @@ public class PurchasedTicketsRepoImpl implements PurchasedTicketsRepo {
     private Condition conditionByUniqueId(PurchasedTicketsUniqueId id) {
         return PURCHASED_TICKETS_TABLE.TICKET_ID.eq(id.ticketId())
                 .and(PURCHASED_TICKETS_TABLE.USER_LOGIN.eq(id.userLogin()));
+    }
+
+    @Override
+    public List<PurchasedTicketsTableRecord> findAllByUserId(String userLogin) {
+        return context
+                .selectFrom(PURCHASED_TICKETS_TABLE)
+                .where(PURCHASED_TICKETS_TABLE.USER_LOGIN.eq(userLogin))
+                .fetch();
     }
 }
