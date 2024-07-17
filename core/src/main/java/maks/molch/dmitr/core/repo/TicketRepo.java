@@ -7,7 +7,14 @@ import maks.molch.dmitr.core.service.filter.TicketFilter;
 import org.apache.commons.lang3.tuple.Triple;
 
 import java.util.List;
+import java.util.Optional;
 
-public interface TicketRepo extends JooqRepo<TicketTableRecord, TicketUniqueId> {
+public interface TicketRepo extends JooqRepo<TicketTableRecord, Integer> {
     List<Triple<TicketTableRecord, RouteTableRecord, CarrierTableRecord>> findAllSortByPrimaryKeyAndFiltered(TicketFilter ticketFilter);
+
+    Optional<TicketTableRecord> findById(TicketUniqueId primaryKey);
+
+    void delete(TicketUniqueId primaryKey);
+
+    boolean exist(TicketUniqueId primaryKey);
 }

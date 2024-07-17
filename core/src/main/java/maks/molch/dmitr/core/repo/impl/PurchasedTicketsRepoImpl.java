@@ -36,9 +36,11 @@ public class PurchasedTicketsRepoImpl implements PurchasedTicketsRepo {
 
     @Override
     public PurchasedTicketsTableRecord save(PurchasedTicketsTableRecord entity) {
-        var purchasedTicketsRecord = context.newRecord(PURCHASED_TICKETS_TABLE, entity);
-        purchasedTicketsRecord.store();
-        return purchasedTicketsRecord;
+        return context
+                .insertInto(PURCHASED_TICKETS_TABLE)
+                .set(entity)
+                .returning()
+                .fetchOne();
     }
 
     @Override

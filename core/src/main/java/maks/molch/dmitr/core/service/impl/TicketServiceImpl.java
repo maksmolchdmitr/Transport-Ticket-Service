@@ -3,12 +3,11 @@ package maks.molch.dmitr.core.service.impl;
 import lombok.AllArgsConstructor;
 import maks.molch.dmitr.core.mapper.RouteMapper;
 import maks.molch.dmitr.core.mapper.TicketMapper;
-import maks.molch.dmitr.core.repo.CarrierRepo;
-import maks.molch.dmitr.core.repo.RouteRepo;
-import maks.molch.dmitr.core.repo.TicketRepo;
+import maks.molch.dmitr.core.repo.*;
 import maks.molch.dmitr.core.service.TicketService;
 import maks.molch.dmitr.core.service.entity.FullTicket;
 import maks.molch.dmitr.core.service.entity.Ticket;
+import maks.molch.dmitr.core.service.entity.TicketPurchase;
 import maks.molch.dmitr.core.service.exception.AlreadyExistException;
 import maks.molch.dmitr.core.service.exception.EntityNotFoundException;
 import maks.molch.dmitr.core.service.filter.TicketFilter;
@@ -25,6 +24,8 @@ public class TicketServiceImpl implements TicketService {
     private final CarrierRepo carrierRepo;
     private final TicketMapper ticketMapper;
     private final RouteMapper routeMapper;
+    private final UserRepo userRepo;
+    private final PurchasedTicketsRepo purchasedTicketsRepo;
 
     @Override
     public List<FullTicket> getTicketsPage(int pageNumber, int pageSize, TicketFilter ticketFilter) {
@@ -47,6 +48,26 @@ public class TicketServiceImpl implements TicketService {
             return ticketMapper.toFullTicket(createdTicket, fullRoute);
         } catch (IntegrityConstraintViolationException e) {
             throw new AlreadyExistException("Such ticket already exist");
+        }
+    }
+
+    @Override
+    public TicketPurchase purchase(int ticketId, String userLogin) {
+        try {
+            var ticketRecord = ticketRepo.findById(ticketId)
+                    .orElseThrow(() -> new EntityNotFoundException("Ticket with such id not found"));
+            var routeRecord = routeRepo.findById(ticketRecord.getRouteId())
+                    .orElseThrow(() -> new EntityNotFoundException("Route with such id not found"));
+            var carrierRecord = carrierRepo.findById(routeRecord.getCarrierName())
+                    .orElseThrow(() -> new EntityNotFoundException("Carrier with such id not found"));
+            userRepo.findById(userLogin)
+                    .orElseThrow(() -> new EntityNotFoundException("User with such id not found"));
+            var purchaseRecord = purchasedTicketsRepo.save(ticketMapper.toPurchaseRecord(ticketId, userLogin));
+            var fullRoute = routeMapper.toRoute(routeRecord, carrierRecord);
+            var fullTicket = ticketMapper.toFullTicket(ticketRecord, fullRoute);
+            return ticketMapper.toPurchase(purchaseRecord, fullTicket, userLogin);
+        } catch (IntegrityConstraintViolationException e) {
+            throw new AlreadyExistException("Such ticket already purchased!");
         }
     }
 }
