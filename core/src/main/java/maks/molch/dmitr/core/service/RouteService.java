@@ -10,4 +10,10 @@ public interface RouteService {
     FullRoute addRoute(Route route);
 
     List<FullRoute> getRoutePage(RouteFilter filter, Integer pageNumber, Integer pageSize);
+
+    FullRoute getFullRoute(Integer id);
+
+    FullRoute updateRoute(int id, Route route);
+
+    void deleteRoute(Integer id);
 }

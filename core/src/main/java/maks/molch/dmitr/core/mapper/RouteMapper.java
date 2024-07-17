@@ -1,5 +1,6 @@
 package maks.molch.dmitr.core.mapper;
 
+import maks.molch.dmitr.core.dto.RouteUpdateRequestDto;
 import maks.molch.dmitr.core.dto.request.RouteCreateRequestDto;
 import maks.molch.dmitr.core.dto.response.RoutePageDto;
 import maks.molch.dmitr.core.dto.response.RouteResponseDto;
@@ -48,4 +49,6 @@ public interface RouteMapper {
                 route.getSeatCount()
         );
     }
+
+    Route toRoute(RouteUpdateRequestDto updateRequestDto);
 }
