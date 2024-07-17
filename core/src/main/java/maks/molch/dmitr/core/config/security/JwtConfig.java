@@ -26,6 +26,7 @@ public class JwtConfig {
 
     @Bean
     public PrivateKey getPrivateKey(JwtConfigProperties config) throws InvalidKeySpecException, NoSuchAlgorithmException {
+        System.out.println("Configs: " + config);
         var cleanKey = config.privateKey().replaceAll("\\s+", "");
         var keySpec = new PKCS8EncodedKeySpec(Base64.getDecoder().decode(cleanKey));
         var keyFactory = KeyFactory.getInstance("RSA");
