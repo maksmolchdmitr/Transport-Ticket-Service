@@ -1,8 +1,9 @@
-package maks.molch.dmitr.core.dto;
+package maks.molch.dmitr.core.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import maks.molch.dmitr.core.dto.CarrierDto;
 
-public record RouteDto(
+public record RouteResponseDto(
         @JsonProperty(value = "id")
         int id,
         @JsonProperty("departure")

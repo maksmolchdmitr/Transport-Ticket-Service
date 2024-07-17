@@ -1,10 +1,11 @@
 package maks.molch.dmitr.core.controller;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import maks.molch.dmitr.core.dto.AuthenticationResponseDto;
-import maks.molch.dmitr.core.dto.UserCreateRequestDto;
-import maks.molch.dmitr.core.dto.UserDto;
-import maks.molch.dmitr.core.dto.UserLoginDto;
+import maks.molch.dmitr.core.dto.request.UserCreateRequestDto;
+import maks.molch.dmitr.core.dto.request.UserLoginRequestDto;
+import maks.molch.dmitr.core.dto.response.AuthenticationResponseDto;
+import maks.molch.dmitr.core.dto.response.UserResponseDto;
 import maks.molch.dmitr.core.mapper.TokenMapper;
 import maks.molch.dmitr.core.mapper.UserMapper;
 import maks.molch.dmitr.core.service.UserService;
@@ -24,15 +25,15 @@ public class UserController {
     private final TokenMapper tokenMapper;
 
     @PostMapping("/register")
-    public UserDto register(@RequestBody UserCreateRequestDto createRequestDto) {
+    public UserResponseDto register(@Valid @RequestBody UserCreateRequestDto createRequestDto) {
         var userTable = userMapper.toUser(createRequestDto);
         var userRecord = userService.register(userTable);
         return userMapper.toDto(userRecord);
     }
 
     @PostMapping("/login")
-    public AuthenticationResponseDto login(@RequestBody UserLoginDto userLoginDto) {
-        var token = authenticationService.authenticateAndGenerateToken(userLoginDto.login(), userLoginDto.password());
+    public AuthenticationResponseDto login(@Valid @RequestBody UserLoginRequestDto userLoginRequestDto) {
+        var token = authenticationService.authenticateAndGenerateToken(userLoginRequestDto.login(), userLoginRequestDto.password());
         return tokenMapper.toDto(token);
     }
 }

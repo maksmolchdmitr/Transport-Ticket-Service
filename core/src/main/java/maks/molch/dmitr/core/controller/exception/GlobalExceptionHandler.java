@@ -3,6 +3,7 @@ package maks.molch.dmitr.core.controller.exception;
 import maks.molch.dmitr.core.service.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -31,5 +32,13 @@ public class GlobalExceptionHandler {
             default -> "Access denied!";
         };
         return new ResponseEntity<>(ErrorMessage.fromThrowable(e, message), HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(value = MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorMessage> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+        return new ResponseEntity<>(
+                ErrorMessage.fromThrowable(e, "Argument not valid!"),
+                HttpStatus.BAD_REQUEST
+        );
     }
 }

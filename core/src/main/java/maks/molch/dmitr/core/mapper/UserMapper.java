@@ -1,7 +1,7 @@
 package maks.molch.dmitr.core.mapper;
 
-import maks.molch.dmitr.core.dto.UserCreateRequestDto;
-import maks.molch.dmitr.core.dto.UserDto;
+import maks.molch.dmitr.core.dto.request.UserCreateRequestDto;
+import maks.molch.dmitr.core.dto.response.UserResponseDto;
 import maks.molch.dmitr.core.jooq.tables.records.UserTableRecord;
 import maks.molch.dmitr.core.service.entity.User;
 import org.mapstruct.Context;
@@ -22,9 +22,9 @@ public interface UserMapper {
 
     User toUser(UserTableRecord createdRecord);
 
-    User toUser(UserDto user);
+    User toUser(UserResponseDto user);
 
-    UserDto toDto(User userRecord);
+    UserResponseDto toDto(User userRecord);
 
     User toUser(UserCreateRequestDto createRequestDto);
 }
