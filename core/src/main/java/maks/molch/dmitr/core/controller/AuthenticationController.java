@@ -1,5 +1,10 @@
 package maks.molch.dmitr.core.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -22,12 +27,28 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
     private final TokenMapper tokenMapper;
 
+    @Operation(summary = "Regenerate access token")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Success",
+                    content = @Content(schema = @Schema(implementation = AuthenticationResponseDto.class))
+            )
+    })
     @PostMapping("/refresh-token")
     public AuthenticationResponseDto refreshToken(HttpServletRequest request, HttpServletResponse response) {
         var token = authenticationService.refreshToken(request, response);
         return tokenMapper.toDto(token);
     }
 
+    @Operation(summary = "Login user and generate access and refresh tokens")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Success",
+                    content = @Content(schema = @Schema(implementation = AuthenticationResponseDto.class))
+            )
+    })
     @PostMapping("/login")
     public AuthenticationResponseDto login(@Valid @RequestBody UserLoginRequestDto userLoginRequestDto) {
         var token = authenticationService.authenticateAndGenerateToken(userLoginRequestDto.login(), userLoginRequestDto.password());

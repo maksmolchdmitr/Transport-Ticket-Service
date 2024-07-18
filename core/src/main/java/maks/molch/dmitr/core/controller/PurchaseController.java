@@ -1,6 +1,7 @@
 package maks.molch.dmitr.core.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -39,7 +40,12 @@ public class PurchaseController {
             ),
             @ApiResponse(
                     responseCode = "409",
-                    description = "Such ticket purchase already exist! Combination of user login and  should be unique!",
+                    description = "Ticket was already purchased!",
+                    content = @Content(schema = @Schema(implementation = ErrorMessage.class))
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Ticket or user was not found with such ids!",
                     content = @Content(schema = @Schema(implementation = ErrorMessage.class))
             )
     })
@@ -49,12 +55,33 @@ public class PurchaseController {
         return ticketMapper.toPurchaseDto(ticketPurchase);
     }
 
+    @Operation(summary = "Get all user purchases")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "List of user purchases",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = PurchaseTicketResponseDto.class)))
+            )
+    })
     @GetMapping("/all/{user_login}")
     public List<PurchaseTicketResponseDto> purchaseTickets(@PathVariable("user_login") String userLogin) {
         var ticketPurchases = ticketService.getUserTicketPurchases(userLogin);
         return ticketMapper.toPurchaseDto(ticketPurchases);
     }
 
+    @Operation(summary = "get purchase by id")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Purchase was successfully found",
+                    content = @Content(schema = @Schema(implementation = PurchaseTicketResponseDto.class))
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Ticket or user was not found with such ids!",
+                    content = @Content(schema = @Schema(implementation = ErrorMessage.class))
+            )
+    })
     @GetMapping("/{id}")
     public PurchaseTicketResponseDto getPurchaseTicket(@PathVariable("id") Integer ticketPurchaseId) {
         var ticketPurchase = ticketService.getTicketPurchase(ticketPurchaseId);
