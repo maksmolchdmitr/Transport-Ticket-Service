@@ -1,7 +1,14 @@
 package maks.molch.dmitr.core.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import maks.molch.dmitr.core.controller.exception.ErrorMessage;
 import maks.molch.dmitr.core.dto.TicketUpdateRequestDto;
 import maks.molch.dmitr.core.dto.request.TicketCreateRequestDto;
 import maks.molch.dmitr.core.dto.response.TicketPageDto;
@@ -23,6 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+@Tag(name = "Ticket Controller")
 @RestController
 @AllArgsConstructor
 @RequestMapping("/ticket")
@@ -30,6 +38,19 @@ public class TicketController {
     private final TicketService ticketService;
     private final TicketMapper ticketMapper;
 
+    @Operation(summary = "Create new ticket")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Ticket was successful created",
+                    content = @Content(schema = @Schema(implementation = TicketResponseDto.class))
+            ),
+            @ApiResponse(
+                    responseCode = "409",
+                    description = "Such ticket already exist! Each route, timestamp, and seat number should form a unique set!)",
+                    content = @Content(schema = @Schema(implementation = ErrorMessage.class))
+            )
+    })
     @PostMapping
     public TicketResponseDto addTicket(@Valid @RequestBody TicketCreateRequestDto createRequestDto) {
         var ticket = ticketMapper.toTicket(createRequestDto);
@@ -37,12 +58,38 @@ public class TicketController {
         return ticketMapper.toDto(fullCreatedTicket);
     }
 
+    @Operation(summary = "Get ticket by id")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Ticket by id",
+                    content = @Content(schema = @Schema(implementation = TicketResponseDto.class))
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Ticket with such id was not found!",
+                    content = @Content(schema = @Schema(implementation = ErrorMessage.class))
+            )
+    })
     @GetMapping("/{id}")
     public TicketResponseDto getTicket(@PathVariable Integer id) {
         var fullTicket = ticketService.getFullTicket(id);
         return ticketMapper.toDto(fullTicket);
     }
 
+    @Operation(summary = "Update ticket")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Ticket was successfully updated!",
+                    content = @Content(schema = @Schema(implementation = TicketResponseDto.class))
+            ),
+            @ApiResponse(
+                    responseCode = "409",
+                    description = "Such ticket already exist! Each route, timestamp, and seat number should form a unique set!)",
+                    content = @Content(schema = @Schema(implementation = ErrorMessage.class))
+            )
+    })
     @PutMapping
     public TicketResponseDto update(@Valid @RequestBody TicketUpdateRequestDto updateRequestDto) {
         var ticket = ticketMapper.toTicket(updateRequestDto);
@@ -50,11 +97,36 @@ public class TicketController {
         return ticketMapper.toDto(fullUpdatedTicket);
     }
 
+    @Operation(summary = "Delete ticket by id")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Ticket was successfully deleted"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "User with such login not found!",
+                    content = @Content(schema = @Schema(implementation = ErrorMessage.class))
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "User with such login not found!",
+                    content = @Content(schema = @Schema(implementation = ErrorMessage.class))
+            )
+    })
     @DeleteMapping("/{id}")
     public void deleteTicket(@PathVariable Integer id) {
         ticketService.deleteTicket(id);
     }
 
+    @Operation(summary = "Get tickets page by filters")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Tickets page",
+                    content = @Content(schema = @Schema(implementation = TicketPageDto.class))
+            )
+    })
     @GetMapping("/page")
     public TicketPageDto getTickets(
             @DateTimeFormat(pattern = "dd.MM.yyyy HH:mm")

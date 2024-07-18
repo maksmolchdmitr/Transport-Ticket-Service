@@ -93,9 +93,13 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     public FullTicket updateTicket(int id, Ticket ticket) {
-        var ticketRecord = ticketMapper.toRecord(id, ticket);
-        ticketRepo.update(ticketRecord);
-        return getFullTicket(id);
+        try {
+            var ticketRecord = ticketMapper.toRecord(id, ticket);
+            ticketRepo.update(ticketRecord);
+            return getFullTicket(id);
+        } catch (IntegrityConstraintViolationException e) {
+            throw new AlreadyExistException("Such ticket already exist!");
+        }
     }
 
     @Override
