@@ -25,8 +25,15 @@ import static org.springframework.http.HttpMethod.PUT;
 @AllArgsConstructor
 public class WebSecurityConfig {
     public static final String[] AUTH_WHITELIST = {
-            "/user/login",
-            "/user/register"
+            "/user/register",
+            "/auth/login",
+            "/auth/refresh-token",
+            // Swagger
+            "/api/v1/auth/**",
+            "/v3/api-docs/**",
+            "/v3/api-docs.yaml",
+            "/swagger-ui/**",
+            "/swagger-ui.html",
     };
 
     @Bean

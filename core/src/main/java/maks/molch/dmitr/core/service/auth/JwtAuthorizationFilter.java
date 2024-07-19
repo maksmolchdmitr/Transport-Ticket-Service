@@ -10,8 +10,6 @@ public abstract class JwtAuthorizationFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         var authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-        return authHeader == null || !authHeader.startsWith(BEARER_PREFIX)
-                || request.getServletPath().equals("/user/login")
-                || request.getServletPath().equals("/user/register");
+        return authHeader == null || !authHeader.startsWith(BEARER_PREFIX);
     }
 }
