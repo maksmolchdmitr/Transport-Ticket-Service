@@ -1,5 +1,6 @@
 package maks.molch.dmitr.core.service.entity;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 public record TicketPurchase(
@@ -7,5 +8,5 @@ public record TicketPurchase(
         FullTicket ticket,
         String userLogin,
         LocalDateTime purchaseDatetime
-) {
+) implements Serializable {
 }

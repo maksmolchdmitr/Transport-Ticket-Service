@@ -7,10 +7,12 @@ import maks.molch.dmitr.core.config.security.JwtConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.cache.annotation.EnableCaching;
 
 @OpenAPIDefinition(info = @Info(title = "Transport Ticket Service"))
 @SpringBootApplication
 @EnableConfigurationProperties({JooqContextConfig.DataSourceConfig.class, JwtConfig.JwtConfigProperties.class})
+@EnableCaching
 public class CoreApplication {
 
     public static void main(String[] args) {
