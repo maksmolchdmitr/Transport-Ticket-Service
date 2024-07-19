@@ -51,7 +51,8 @@ public class TicketServiceImpl implements TicketService {
         logger.info("Add ticket {}", ticket);
         try {
             var ticketRecord = ticketMapper.toRecord(ticket);
-            return getFullTicket(ticketRecord.getId());
+            var createdTicketRecord = ticketRepo.save(ticketRecord);
+            return getFullTicket(createdTicketRecord.getId());
         } catch (IntegrityConstraintViolationException e) {
             throw new AlreadyExistException("Such ticket already exist");
         }

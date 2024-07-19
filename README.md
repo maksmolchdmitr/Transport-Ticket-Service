@@ -5,6 +5,9 @@
 Run:
 `docker-compose --env-file docker-compose.env up`
 
+Run without core service:
+`docker-compose --env-file docker-compose.env up $(docker-compose --env-file docker-compose.env config --services | awk '{print $1}' | grep -v core)`
+
 ## Generate new RSA Public and Private keys
 
 You can generate your own new key with **[site](https://www.devglan.com/online-tools/rsa-key-generator)**
