@@ -10,3 +10,5 @@ spring:
     enabled: true
 kafka:
   serverUrl: ${KAFKA_SERVER_URL:localhost:9092}
+  groupId: ${KAFKA_MESSAGE_GROUP_ID:analytics-consumer-group}
+  topicName: ${KAFKA_TOPIC_NAME:purchased-tickets}
