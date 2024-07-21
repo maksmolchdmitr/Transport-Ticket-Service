@@ -15,7 +15,11 @@ import maks.molch.dmitr.core.service.entity.TicketPurchase;
 import maks.molch.dmitr.core.service.exception.AlreadyExistException;
 import maks.molch.dmitr.core.service.exception.EntityNotFoundException;
 import maks.molch.dmitr.core.service.filter.TicketFilter;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jooq.exception.IntegrityConstraintViolationException;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,6 +27,8 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 public class TicketServiceImpl implements TicketService {
+    private static final Logger logger = LogManager.getLogger(TicketServiceImpl.class);
+
     private final TicketRepo ticketRepo;
     private final RouteRepo routeRepo;
     private final CarrierRepo carrierRepo;
@@ -33,6 +39,7 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     public List<FullTicket> getTicketsPage(int pageNumber, int pageSize, TicketFilter ticketFilter) {
+        logger.info("Get tickets page {} of {} with filters {}", pageNumber, pageSize, ticketFilter);
         var filteredTickets = ticketRepo.findAllSortByPrimaryKeyAndFiltered(ticketFilter);
         var fromIndex = Math.min(pageNumber * pageSize, filteredTickets.size());
         var toIndex = Math.min(pageNumber * pageSize + pageSize, filteredTickets.size());
@@ -41,16 +48,20 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     public FullTicket addTicket(Ticket ticket) {
+        logger.info("Add ticket {}", ticket);
         try {
             var ticketRecord = ticketMapper.toRecord(ticket);
-            return getFullTicket(ticketRecord.getId());
+            var createdTicketRecord = ticketRepo.save(ticketRecord);
+            return getFullTicket(createdTicketRecord.getId());
         } catch (IntegrityConstraintViolationException e) {
             throw new AlreadyExistException("Such ticket already exist");
         }
     }
 
+    @CacheEvict(value = "ticket_purchase_cache", key = "#userLogin")
     @Override
     public TicketPurchase purchase(int ticketId, String userLogin) {
+        logger.info("Purchase ticket id:{}", ticketId);
         try {
             userRepo.findById(userLogin)
                     .orElseThrow(() -> new EntityNotFoundException("User with such id not found"));
@@ -73,8 +84,10 @@ public class TicketServiceImpl implements TicketService {
         }
     }
 
+    @Cacheable(value = "ticket_purchase_cache", key = "#userLogin")
     @Override
     public List<TicketPurchase> getUserTicketPurchases(String userLogin) {
+        logger.info("Get user ticket purchase list");
         userRepo.findById(userLogin)
                 .orElseThrow(() -> new EntityNotFoundException("User with such id not found"));
         var ticketPurchases = purchasedTicketsRepo.findAllByUserId(userLogin);
@@ -83,6 +96,7 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     public TicketPurchase getTicketPurchase(Integer ticketPurchaseId) {
+        logger.info("Get ticket purchase by id:{}", ticketPurchaseId);
         var purchase = purchasedTicketsRepo.findById(ticketPurchaseId)
                 .orElseThrow(() -> new EntityNotFoundException("Purchase with such id not found"));
         var fullTicket = getFullTicket(purchase.getTicketId());
@@ -91,6 +105,7 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     public FullTicket getFullTicket(Integer id) {
+        logger.info("Get full ticket by id:{}", id);
         var ticketRecord = ticketRepo.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Ticket with such id not found"));
         var routeRecord = routeRepo.findById(ticketRecord.getRouteId())
@@ -103,6 +118,7 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     public FullTicket updateTicket(int id, Ticket ticket) {
+        logger.info("Update ticket with id:{}", id);
         try {
             var ticketRecord = ticketMapper.toRecord(id, ticket);
             ticketRepo.update(ticketRecord);
@@ -114,6 +130,7 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     public void deleteTicket(Integer id) {
+        logger.info("Delete ticket with id:{}", id);
         ticketRepo.delete(id);
     }
 }
