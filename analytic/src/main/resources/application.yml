@@ -8,3 +8,5 @@ spring:
     username: ${POSTGRES_USER:postgres}
   liquibase:
     enabled: true
+kafka:
+  serverUrl: ${KAFKA_SERVER_URL:localhost:9092}
