@@ -17,6 +17,7 @@
     <modules>
         <module>core-jooq</module>
         <module>core</module>
+        <module>analytic</module>
     </modules>
 
     <properties>
