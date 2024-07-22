@@ -14,6 +14,9 @@ application:
     publicKey: ${JWT_PUBLIC_KEY:MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAnG7FvFPuFj6nBtDwavL6vLMk86CItFfUcIFSmYpsiz+1tmTjL2qgc1NGu/rfxSuPIFi5CrEN7woQx9ug1NQ+Iiv9aQj3/CxhWZkXvrn90ZmJKq5zU9i8EU+tqry8YP10LZMZDNhkSSdGOaFH7IAP8Qp3LHb9h6f3SF1ctNcXnxXjij+G/5Mkf97F40xMEiyCSE9RKLBf1jltgyDUgKKAJWuMluTwbvMoDxT6258uc8MlAao5MbXiP2VK2V0XtYOfUO/z0vX2K8GJc7sTjHaIibXKgZ7PQ8KqhI+r/OEuxjnV5Ms2zTNzSd2qQXvpK24kBZmPehqzctXT1CEtHlQhBwIDAQAB}
     expire-time-access-token-in-minutes: 5
     expire-time-refresh-token-in-days: 2
+  kafka:
+    address: ${KAFKA_SERVER_URL:localhost:9092}
+    topicName: ${KAFKA_TOPIC_NAME:purchased-tickets}
 springdoc:
   swagger-ui:
     path: /swagger-ui.html

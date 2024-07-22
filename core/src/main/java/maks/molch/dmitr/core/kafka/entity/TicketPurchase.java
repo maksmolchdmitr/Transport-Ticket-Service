@@ -1,4 +1,4 @@
-package maks.molch.dmitr.analytic.entity;
+package maks.molch.dmitr.core.kafka.entity;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

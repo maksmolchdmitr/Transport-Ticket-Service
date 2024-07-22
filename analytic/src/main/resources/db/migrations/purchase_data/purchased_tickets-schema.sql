@@ -1,5 +1,6 @@
 create table purchased_tickets_table
 (
+    id serial primary key,
     user_login                varchar(32) not null,
     purchase_datetime         timestamp   not null,
     ticket_datetime           timestamp   not null,

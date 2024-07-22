@@ -1,6 +1,6 @@
 package maks.molch.dmitr.analytic.config;
 
-import maks.molch.dmitr.analytic.entity.TicketPurchase;
+import maks.molch.dmitr.analytic.service.entity.TicketPurchase;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.LongDeserializer;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -35,10 +35,16 @@ public class KafkaConfig {
 
     public ConsumerFactory<Long, TicketPurchase> consumerFactory(KafkaProps kafkaProps) {
         Map<String, Object> properties = new HashMap<>();
+
+        JsonDeserializer<TicketPurchase> deserializer = new JsonDeserializer<>(TicketPurchase.class);
+        deserializer.addTrustedPackages("*");
+        deserializer.setRemoveTypeHeaders(false);
+        deserializer.setUseTypeMapperForKey(true);
+
         properties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaProps.serverUrl());
         properties.put(ConsumerConfig.GROUP_ID_CONFIG, kafkaProps.groupId());
         properties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, LongDeserializer.class);
-        properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
-        return new DefaultKafkaConsumerFactory<>(properties);
+        properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, deserializer);
+        return new DefaultKafkaConsumerFactory<>(properties, new LongDeserializer(), deserializer);
     }
 }

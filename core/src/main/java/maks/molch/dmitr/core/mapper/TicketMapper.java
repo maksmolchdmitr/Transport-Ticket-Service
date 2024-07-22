@@ -85,4 +85,24 @@ public interface TicketMapper {
     Ticket toTicket(TicketUpdateRequestDto updateRequestDto);
 
     TicketTableRecord toRecord(int id, Ticket ticket);
+
+    default maks.molch.dmitr.core.kafka.entity.TicketPurchase toKafkaPurchase(
+            TicketPurchase ticketPurchase,
+            FullTicket ticket
+    ) {
+        var route = ticket.fullRoute();
+        var carrier = ticket.fullRoute().carrier();
+        return new maks.molch.dmitr.core.kafka.entity.TicketPurchase(
+                ticketPurchase.userLogin(),
+                ticketPurchase.purchaseDatetime(),
+                ticket.dateAndTime(),
+                ticket.seatNumber(),
+                ticket.price(),
+                route.departure(),
+                route.arrival(),
+                carrier.name(),
+                route.durationInMinutes(),
+                route.seatCount()
+        );
+    }
 }
