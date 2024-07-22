@@ -21,6 +21,7 @@ import org.jooq.exception.IntegrityConstraintViolationException;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -36,6 +37,7 @@ public class TicketServiceImpl implements TicketService {
     private final RouteMapper routeMapper;
     private final UserRepo userRepo;
     private final PurchasedTicketsRepo purchasedTicketsRepo;
+    private final KafkaAnalyticProducer kafkaAnalyticProducer;
 
     @Override
     public List<FullTicket> getTicketsPage(int pageNumber, int pageSize, TicketFilter ticketFilter) {
@@ -59,6 +61,7 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @CacheEvict(value = "ticket_purchase_cache", key = "#userLogin")
+    @Transactional
     @Override
     public TicketPurchase purchase(int ticketId, String userLogin) {
         logger.info("Purchase ticket id:{}", ticketId);
@@ -78,10 +81,17 @@ public class TicketServiceImpl implements TicketService {
             var fullTicket = ticketMapper.toFullTicket(ticketRecord, fullRoute);
             ticketRepo.setPurchasedById(ticketId, userLogin);
             var purchaseRecord = purchasedTicketsRepo.save(ticketMapper.toPurchaseRecord(ticketId, userLogin));
-            return ticketMapper.toPurchase(purchaseRecord, fullTicket, userLogin);
+            var ticketPurchase = ticketMapper.toPurchase(purchaseRecord, fullTicket, userLogin);
+            sendAnalyticToKafka(ticketPurchase, fullTicket);
+            return ticketPurchase;
         } catch (IntegrityConstraintViolationException e) {
             throw new AlreadyExistException("Such ticket already purchased!");
         }
+    }
+
+    private void sendAnalyticToKafka(TicketPurchase ticketPurchase, FullTicket fullTicket) {
+        var kafkaTicketPurchase = ticketMapper.toKafkaPurchase(ticketPurchase, fullTicket);
+        kafkaAnalyticProducer.sendTicketPurchase(kafkaTicketPurchase);
     }
 
     @Cacheable(value = "ticket_purchase_cache", key = "#userLogin")

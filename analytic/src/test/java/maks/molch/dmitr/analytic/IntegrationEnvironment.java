@@ -1,4 +1,4 @@
-package maks.molch.dmitr.core;
+package maks.molch.dmitr.analytic;
 
 import liquibase.Contexts;
 import liquibase.LabelExpression;
@@ -24,9 +24,10 @@ import java.sql.SQLException;
 public abstract class IntegrationEnvironment {
     @Container
     public static final JdbcDatabaseContainer<?> DATABASE_CONTAINER;
+
     static {
         DATABASE_CONTAINER = new PostgreSQLContainer<>("postgres:15-alpine")
-                .withDatabaseName("core")
+                .withDatabaseName("analytics")
                 .withUsername("postgres")
                 .withPassword("postgres");
         DATABASE_CONTAINER.start();
@@ -37,10 +38,10 @@ public abstract class IntegrationEnvironment {
     private static void runMigrations() {
         var changelogPath = new File(".").toPath().toAbsolutePath().
                 getParent().getParent().resolve("db/migrations");
-        try(var conn = DriverManager
+        try (var conn = DriverManager
                 .getConnection(IntegrationEnvironment.DATABASE_CONTAINER.getJdbcUrl(),
                         IntegrationEnvironment.DATABASE_CONTAINER.getUsername(),
-                        IntegrationEnvironment.DATABASE_CONTAINER.getPassword())){
+                        IntegrationEnvironment.DATABASE_CONTAINER.getPassword())) {
             var database = new PostgresDatabase();
             database.setConnection(new JdbcConnection(conn));
             var liquibase = new Liquibase("master.xml",
@@ -52,7 +53,7 @@ public abstract class IntegrationEnvironment {
     }
 
     @DynamicPropertySource
-    static void jdbcProperties(DynamicPropertyRegistry registry){
+    static void jdbcProperties(DynamicPropertyRegistry registry) {
         registry.add("spring.datasource.url", DATABASE_CONTAINER::getJdbcUrl);
         registry.add("spring.datasource.username", DATABASE_CONTAINER::getUsername);
         registry.add("spring.datasource.password", DATABASE_CONTAINER::getPassword);

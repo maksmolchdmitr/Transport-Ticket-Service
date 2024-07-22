@@ -31,22 +31,18 @@ services:
     ports:
       - "5432:5432"
 
-  liquibase-migrations:
-    image: liquibase/liquibase:4.18
-    depends_on:
-      - postgresql
-    command:
-      - --hub-mode=off
-      - --changelog-file=changelog/master.xml
-      - --driver=org.postgresql.Driver
-      - --url=jdbc:postgresql://postgresql:5432/core
-      - --username=postgres
-      - --password=postgres
-      - update
+  postgresql-analytics:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=analytics
     volumes:
-      - ./core/src/main/resources/db/migrations:/liquibase/changelog
+      - database_analytics:/var/lib/postgresql/data
     networks:
       - backend
+    ports:
+      - "5433:5432"
 
   redis:
     image: redis:latest
@@ -60,8 +56,34 @@ services:
     volumes:
       - redis_data:/data
 
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "2181:2181"
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_INTERNAL:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092,PLAINTEXT_INTERNAL://kafka:29092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+
+
 volumes:
   database:
+  database_analytics:
   redis_data:
 
 networks:
