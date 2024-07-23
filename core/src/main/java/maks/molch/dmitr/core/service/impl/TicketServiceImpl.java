@@ -15,6 +15,7 @@ import maks.molch.dmitr.core.service.entity.TicketPurchase;
 import maks.molch.dmitr.core.service.exception.AlreadyExistException;
 import maks.molch.dmitr.core.service.exception.EntityNotFoundException;
 import maks.molch.dmitr.core.service.filter.TicketFilter;
+import maks.molch.dmitr.core.service.kafka.KafkaAnalyticProducer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jooq.exception.IntegrityConstraintViolationException;

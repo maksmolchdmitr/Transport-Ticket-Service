@@ -1,6 +1,6 @@
 package maks.molch.dmitr.core.config;
 
-import maks.molch.dmitr.core.kafka.entity.TicketPurchase;
+import maks.molch.dmitr.core.service.kafka.entity.TicketPurchase;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.LongSerializer;
 import org.springframework.boot.context.properties.ConfigurationProperties;

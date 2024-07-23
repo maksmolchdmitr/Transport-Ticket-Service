@@ -85,13 +85,13 @@ public interface TicketMapper {
 
     TicketPurchase toPurchase(PurchasedTicketsTableRecord purchase);
 
-    default maks.molch.dmitr.core.kafka.entity.TicketPurchase toKafkaPurchase(
+    default maks.molch.dmitr.core.service.kafka.entity.TicketPurchase toKafkaPurchase(
             TicketPurchase ticketPurchase,
             FullTicket ticket
     ) {
         var route = ticket.fullRoute();
         var carrier = ticket.fullRoute().carrier();
-        return new maks.molch.dmitr.core.kafka.entity.TicketPurchase(
+        return new maks.molch.dmitr.core.service.kafka.entity.TicketPurchase(
                 ticketPurchase.userLogin(),
                 ticketPurchase.purchaseDatetime(),
                 ticket.dateAndTime(),
