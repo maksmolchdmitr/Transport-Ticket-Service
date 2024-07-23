@@ -5,14 +5,17 @@ package maks.molch.dmitr.core.jooq.tables.records;
 
 
 import jakarta.validation.constraints.Size;
+
+import java.beans.ConstructorProperties;
+
+import javax.annotation.processing.Generated;
+
 import maks.molch.dmitr.core.jooq.tables.UserTable;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jooq.Record1;
 import org.jooq.impl.UpdatableRecordImpl;
-
-import javax.annotation.processing.Generated;
-import java.beans.ConstructorProperties;
 
 
 /**
@@ -121,7 +124,7 @@ public class UserTableRecord extends UpdatableRecordImpl<UserTableRecord> {
     /**
      * Create a detached, initialised UserTableRecord
      */
-    @ConstructorProperties({"login", "password", "fullName", "role"})
+    @ConstructorProperties({ "login", "password", "fullName", "role" })
     public UserTableRecord(@NotNull String login, @NotNull String password, @NotNull String fullName, @Nullable String role) {
         super(UserTable.USER_TABLE);
 

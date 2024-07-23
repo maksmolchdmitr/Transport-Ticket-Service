@@ -5,16 +5,19 @@ package maks.molch.dmitr.core.jooq.tables.records;
 
 
 import jakarta.validation.constraints.Size;
+
+import java.beans.ConstructorProperties;
+import java.math.BigInteger;
+import java.time.LocalDateTime;
+
+import javax.annotation.processing.Generated;
+
 import maks.molch.dmitr.core.jooq.tables.TicketTable;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jooq.Record1;
 import org.jooq.impl.UpdatableRecordImpl;
-
-import javax.annotation.processing.Generated;
-import java.beans.ConstructorProperties;
-import java.math.BigInteger;
-import java.time.LocalDateTime;
 
 
 /**
@@ -151,7 +154,7 @@ public class TicketTableRecord extends UpdatableRecordImpl<TicketTableRecord> {
     /**
      * Create a detached, initialised TicketTableRecord
      */
-    @ConstructorProperties({"id", "routeId", "dateAndTime", "seatNumber", "price", "purchasedBy"})
+    @ConstructorProperties({ "id", "routeId", "dateAndTime", "seatNumber", "price", "purchasedBy" })
     public TicketTableRecord(@Nullable Integer id, @NotNull Integer routeId, @NotNull LocalDateTime dateAndTime, @NotNull Integer seatNumber, @NotNull BigInteger price, @Nullable String purchasedBy) {
         super(TicketTable.TICKET_TABLE);
 

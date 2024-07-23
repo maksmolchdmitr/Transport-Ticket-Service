@@ -5,14 +5,16 @@ package maks.molch.dmitr.core.jooq.tables.pojos;
 
 
 import jakarta.validation.constraints.Size;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.processing.Generated;
 import java.beans.ConstructorProperties;
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.time.LocalDateTime;
+
+import javax.annotation.processing.Generated;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 
 /**
@@ -48,14 +50,14 @@ public class TicketTable implements Serializable {
         this.purchasedBy = value.purchasedBy;
     }
 
-    @ConstructorProperties({"id", "routeId", "dateAndTime", "seatNumber", "price", "purchasedBy"})
+    @ConstructorProperties({ "id", "routeId", "dateAndTime", "seatNumber", "price", "purchasedBy" })
     public TicketTable(
-            @Nullable Integer id,
+        @Nullable Integer id,
         @NotNull Integer routeId,
         @NotNull LocalDateTime dateAndTime,
         @NotNull Integer seatNumber,
-            @NotNull BigInteger price,
-            @Nullable String purchasedBy
+        @NotNull BigInteger price,
+        @Nullable String purchasedBy
     ) {
         this.id = id;
         this.routeId = routeId;
@@ -172,7 +174,8 @@ public class TicketTable implements Serializable {
         if (this.id == null) {
             if (other.id != null)
                 return false;
-        } else if (!this.id.equals(other.id))
+        }
+        else if (!this.id.equals(other.id))
             return false;
         if (this.routeId == null) {
             if (other.routeId != null)
@@ -201,7 +204,8 @@ public class TicketTable implements Serializable {
         if (this.purchasedBy == null) {
             if (other.purchasedBy != null)
                 return false;
-        } else if (!this.purchasedBy.equals(other.purchasedBy))
+        }
+        else if (!this.purchasedBy.equals(other.purchasedBy))
             return false;
         return true;
     }

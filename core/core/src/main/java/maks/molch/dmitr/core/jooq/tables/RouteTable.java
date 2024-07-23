@@ -4,23 +4,41 @@
 package maks.molch.dmitr.core.jooq.tables;
 
 
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+
+import javax.annotation.processing.Generated;
+
 import maks.molch.dmitr.core.jooq.DefaultSchema;
 import maks.molch.dmitr.core.jooq.Keys;
 import maks.molch.dmitr.core.jooq.tables.CarrierTable.CarrierTablePath;
 import maks.molch.dmitr.core.jooq.tables.TicketTable.TicketTablePath;
 import maks.molch.dmitr.core.jooq.tables.records.RouteTableRecord;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jooq.Condition;
+import org.jooq.Field;
+import org.jooq.ForeignKey;
+import org.jooq.Identity;
+import org.jooq.InverseForeignKey;
+import org.jooq.Name;
+import org.jooq.Path;
+import org.jooq.PlainSQL;
+import org.jooq.QueryPart;
 import org.jooq.Record;
-import org.jooq.*;
+import org.jooq.SQL;
+import org.jooq.Schema;
+import org.jooq.Select;
+import org.jooq.Stringly;
+import org.jooq.Table;
+import org.jooq.TableField;
+import org.jooq.TableOptions;
+import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
-
-import javax.annotation.processing.Generated;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
 
 
 /**

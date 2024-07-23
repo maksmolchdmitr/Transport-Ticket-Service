@@ -5,12 +5,14 @@ package maks.molch.dmitr.core.jooq.tables.pojos;
 
 
 import jakarta.validation.constraints.Size;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.processing.Generated;
 import java.beans.ConstructorProperties;
 import java.io.Serializable;
+
+import javax.annotation.processing.Generated;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 
 /**
@@ -42,7 +44,7 @@ public class UserTable implements Serializable {
         this.role = value.role;
     }
 
-    @ConstructorProperties({"login", "password", "fullName", "role"})
+    @ConstructorProperties({ "login", "password", "fullName", "role" })
     public UserTable(
         @NotNull String login,
         @NotNull String password,
@@ -152,7 +154,8 @@ public class UserTable implements Serializable {
         if (this.role == null) {
             if (other.role != null)
                 return false;
-        } else if (!this.role.equals(other.role))
+        }
+        else if (!this.role.equals(other.role))
             return false;
         return true;
     }

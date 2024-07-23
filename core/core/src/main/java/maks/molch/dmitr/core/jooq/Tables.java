@@ -4,9 +4,14 @@
 package maks.molch.dmitr.core.jooq;
 
 
-import maks.molch.dmitr.core.jooq.tables.*;
-
 import javax.annotation.processing.Generated;
+
+import maks.molch.dmitr.core.jooq.tables.CarrierTable;
+import maks.molch.dmitr.core.jooq.tables.PurchasedTicketsTable;
+import maks.molch.dmitr.core.jooq.tables.RouteTable;
+import maks.molch.dmitr.core.jooq.tables.TicketTable;
+import maks.molch.dmitr.core.jooq.tables.TokenTable;
+import maks.molch.dmitr.core.jooq.tables.UserTable;
 
 
 /**

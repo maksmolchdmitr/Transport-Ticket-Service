@@ -184,6 +184,17 @@
             <artifactId>spring-kafka</artifactId>
             <version>3.2.2</version>
         </dependency>
+
+
+        <dependency>
+            <groupId>org.jooq</groupId>
+            <artifactId>jooq-codegen</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jooq</groupId>
+            <artifactId>jooq-meta-extensions-liquibase</artifactId>
+            <version>3.18.0</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -227,6 +238,57 @@
                     </compilerArgs>
                 </configuration>
             </plugin>
+
+            <plugin>
+                <groupId>org.jooq</groupId>
+                <artifactId>jooq-codegen-maven</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <generator>
+                        <database>
+                            <name>org.jooq.meta.extensions.liquibase.LiquibaseDatabase</name>
+                            <properties>
+                                <property>
+                                    <key>rootPath</key>
+                                    <value>src/main/resources/db/migrations</value>
+                                </property>
+                                <property>
+                                    <key>scripts</key>
+                                    <value>master.xml</value>
+                                </property>
+                            </properties>
+                        </database>
+                        <generate>
+                            <generatedAnnotation>true</generatedAnnotation>
+                            <generatedAnnotationDate>false</generatedAnnotationDate>
+                            <nullableAnnotation>true</nullableAnnotation>
+                            <nullableAnnotationType>org.jetbrains.annotations.Nullable</nullableAnnotationType>
+                            <nonnullAnnotation>true</nonnullAnnotation>
+                            <nonnullAnnotationType>org.jetbrains.annotations.NotNull</nonnullAnnotationType>
+                            <jpaAnnotations>false</jpaAnnotations>
+                            <validationAnnotations>true</validationAnnotations>
+                            <springAnnotations>true</springAnnotations>
+                            <constructorPropertiesAnnotation>true</constructorPropertiesAnnotation>
+                            <constructorPropertiesAnnotationOnPojos>true</constructorPropertiesAnnotationOnPojos>
+                            <constructorPropertiesAnnotationOnRecords>true</constructorPropertiesAnnotationOnRecords>
+                            <fluentSetters>false</fluentSetters>
+                            <daos>false</daos>
+                            <pojos>true</pojos>
+                        </generate>
+                        <target>
+                            <packageName>maks.molch.dmitr.core.jooq</packageName>
+                            <directory>core/src/main/java</directory>
+                        </target>
+                    </generator>
+                </configuration>
+            </plugin>
+
         </plugins>
     </build>
 
