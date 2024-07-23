@@ -219,6 +219,8 @@
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
+                    <generatedSourcesDirectory>${project.build.directory}/generated-sources/jooq
+                    </generatedSourcesDirectory>
                     <annotationProcessorPaths>
                         <path>
                             <groupId>org.projectlombok</groupId>
@@ -256,7 +258,7 @@
                             <properties>
                                 <property>
                                     <key>rootPath</key>
-                                    <value>src/main/resources/db/migrations</value>
+                                    <value>${project.basedir}/src/main/resources/db/migrations</value>
                                 </property>
                                 <property>
                                     <key>scripts</key>
@@ -283,12 +285,11 @@
                         </generate>
                         <target>
                             <packageName>maks.molch.dmitr.core.jooq</packageName>
-                            <directory>core/src/main/java</directory>
+                            <directory>${project.build.directory}/generated-sources/jooq</directory>
                         </target>
                     </generator>
                 </configuration>
             </plugin>
-
         </plugins>
     </build>
 
