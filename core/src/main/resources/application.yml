@@ -3,9 +3,9 @@ spring:
     name: core
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: ${POSTGRES_URL}
-    password: ${POSTGRES_PASSWORD}
-    username: ${POSTGRES_USER}
+    url: ${POSTGRES_URL:jdbc:postgresql://localhost:5432/core}
+    password: ${POSTGRES_PASSWORD:postgres}
+    username: ${POSTGRES_USER:postgres}
   liquibase:
     enabled: true
   data:
