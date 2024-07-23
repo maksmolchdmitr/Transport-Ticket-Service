@@ -15,7 +15,6 @@
     <description>Transport Ticket Service</description>
     <packaging>pom</packaging>
     <modules>
-        <module>core-jooq</module>
         <module>core</module>
         <module>analytic</module>
     </modules>
