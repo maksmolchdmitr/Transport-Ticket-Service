@@ -21,6 +21,9 @@ application:
   kafka:
     address: ${KAFKA_SERVER_URL:localhost:9092}
     topicName: ${KAFKA_TOPIC_NAME:purchased-tickets}
+  admin:
+    login: ${ADMIN_LOGIN:admin}
+    password: ${ADMIN_PASSWORD:admin}
 springdoc:
   swagger-ui:
     path: /swagger-ui.html

@@ -34,6 +34,8 @@ services:
       KAFKA_SERVER_URL: kafka:9092
       REDIS_HOST: redis
       REDIS_PORT: 6379
+      ADMIN_LOGIN: ${ADMIN_LOGIN}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
     container_name: core-service
     ports:
       - "8080:8080"
