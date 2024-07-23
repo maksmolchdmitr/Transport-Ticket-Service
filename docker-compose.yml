@@ -1,17 +1,39 @@
 version: "3"
 
 services:
+  analytic:
+    build:
+      context: ./analytic
+      dockerfile: Dockerfile
+    image: analytic-service
+    depends_on:
+      - postgresql-analytics
+    environment:
+      POSTGRES_URL: jdbc:postgresql://postgresql-analytics:5432/analytics
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      KAFKA_SERVER_URL: kafka:9092
+    container_name: analytic-service
+    networks:
+      - backend
+
   core:
     build:
       context: ./core
       dockerfile: Dockerfile
     image: core-service
+    depends_on:
+      - postgresql
+      - redis
     environment:
       POSTGRES_URL: jdbc:postgresql://postgresql:5432/core
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       JWT_PRIVATE_KEY: ${PRIV_KEY}
       JWT_PUBLIC_KEY: ${PUB_KEY}
+      KAFKA_SERVER_URL: kafka:9092
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
     container_name: core-service
     ports:
       - "8080:8080"
@@ -55,6 +77,8 @@ services:
       - "6379:6379"
     volumes:
       - redis_data:/data
+    networks:
+      - backend
 
 
   zookeeper:
@@ -64,6 +88,8 @@ services:
       ZOOKEEPER_TICK_TIME: 2000
     ports:
       - "2181:2181"
+    networks:
+      - backend
 
   kafka:
     image: confluentinc/cp-kafka:latest
@@ -73,12 +99,14 @@ services:
       - "9092:9092"
     environment:
       KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_INTERNAL:PLAINTEXT
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092,PLAINTEXT_INTERNAL://kafka:29092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+    networks:
+      - backend
 
 
 volumes:
