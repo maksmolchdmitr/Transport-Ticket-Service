@@ -24,25 +24,14 @@ import java.util.Objects;
 
 @Mapper(componentModel = "spring")
 public interface TicketMapper {
-
-    FullTicket toFullTicket(TicketResponseDto dto);
-
-    @Mapping(source = "fullTicket.fullRoute", target = "route")
-    TicketResponseDto toDto(FullTicket fullTicket);
-
-    @Mapping(source = "fullTicketPage", target = "tickets")
-    TicketPageDto toPageDto(List<FullTicket> fullTicketPage, int pageNumber, int pageSize);
+    Ticket toTicket(TicketUpdateRequestDto updateRequestDto);
 
     Ticket toTicket(TicketCreateRequestDto createRequestDto);
-
-    TicketTableRecord toRecord(Ticket ticket);
 
     @Mapping(source = "ticketRecord.id", target = "id")
     FullTicket toFullTicket(TicketTableRecord ticketRecord, FullRoute fullRoute);
 
-    Ticket toTicket(TicketTableRecord ticketTableRecord);
-
-    default FullTicket toTicket(Triple<TicketTableRecord, RouteTableRecord, CarrierTableRecord> triple) {
+    default FullTicket toFullTicket(Triple<TicketTableRecord, RouteTableRecord, CarrierTableRecord> triple) {
         var ticket = triple.getLeft();
         var route = triple.getMiddle();
         var carrier = triple.getRight();
@@ -65,7 +54,17 @@ public interface TicketMapper {
         );
     }
 
-    List<FullTicket> toTickets(List<Triple<TicketTableRecord, RouteTableRecord, CarrierTableRecord>> triples);
+    List<FullTicket> toFullTicketList(List<Triple<TicketTableRecord, RouteTableRecord, CarrierTableRecord>> triples);
+
+    TicketTableRecord toRecord(int id, Ticket ticket);
+
+    @Mapping(source = "fullTicket.fullRoute", target = "route")
+    TicketResponseDto toDto(FullTicket fullTicket);
+
+    @Mapping(source = "fullTicketPage", target = "tickets")
+    TicketPageDto toPageDto(List<FullTicket> fullTicketPage, int pageNumber, int pageSize);
+
+    TicketTableRecord toRecord(Ticket ticket);
 
     PurchaseTicketResponseDto toPurchaseDto(TicketPurchase ticketPurchase);
 
@@ -76,23 +75,19 @@ public interface TicketMapper {
     @Mapping(source = "purchaseRecord.id", target = "id")
     TicketPurchase toPurchase(PurchasedTicketsTableRecord purchaseRecord, FullTicket fullTicket, String userLogin);
 
-    List<TicketPurchase> toPurchase(List<PurchasedTicketsTableRecord> ticketPurchases);
+    List<TicketPurchase> toPurchaseList(List<PurchasedTicketsTableRecord> ticketPurchases);
 
-    List<PurchaseTicketResponseDto> toPurchaseDto(List<TicketPurchase> ticketPurchases);
+    List<PurchaseTicketResponseDto> toPurchaseDtoList(List<TicketPurchase> ticketPurchases);
 
     TicketPurchase toPurchase(PurchasedTicketsTableRecord purchase);
 
-    Ticket toTicket(TicketUpdateRequestDto updateRequestDto);
-
-    TicketTableRecord toRecord(int id, Ticket ticket);
-
-    default maks.molch.dmitr.core.kafka.entity.TicketPurchase toKafkaPurchase(
+    default maks.molch.dmitr.core.service.kafka.entity.TicketPurchase toKafkaPurchase(
             TicketPurchase ticketPurchase,
             FullTicket ticket
     ) {
         var route = ticket.fullRoute();
         var carrier = ticket.fullRoute().carrier();
-        return new maks.molch.dmitr.core.kafka.entity.TicketPurchase(
+        return new maks.molch.dmitr.core.service.kafka.entity.TicketPurchase(
                 ticketPurchase.userLogin(),
                 ticketPurchase.purchaseDatetime(),
                 ticket.dateAndTime(),

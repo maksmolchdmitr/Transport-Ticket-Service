@@ -12,6 +12,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {
+    User toUser(UserTableRecord createdRecord);
+
+    User toUser(UserCreateRequestDto createRequestDto);
+
+    UserResponseDto toDto(User userRecord);
+
     @Mapping(source = "user.password", target = "password", qualifiedByName = "encodePassword")
     UserTableRecord toRecord(User user, @Context PasswordEncoder passwordEncoder);
 
@@ -19,12 +25,4 @@ public interface UserMapper {
     default String encodePassword(String password, @Context PasswordEncoder passwordEncoder) {
         return passwordEncoder.encode(password);
     }
-
-    User toUser(UserTableRecord createdRecord);
-
-    User toUser(UserResponseDto user);
-
-    UserResponseDto toDto(User userRecord);
-
-    User toUser(UserCreateRequestDto createRequestDto);
 }

@@ -18,23 +18,14 @@ import java.util.Objects;
 
 @Mapper(componentModel = "spring")
 public interface RouteMapper {
-    FullRoute toRoute(RouteResponseDto dto);
-
-    RouteResponseDto toDto(FullRoute fullRoute);
-
     Route toRoute(RouteCreateRequestDto createRequestDto);
 
+    Route toRoute(RouteUpdateRequestDto updateRequestDto);
+
     @Mapping(source = "carrierRecord", target = "carrier")
-    FullRoute toRoute(RouteTableRecord routeRecord, CarrierTableRecord carrierRecord);
+    FullRoute toFullRoute(RouteTableRecord routeRecord, CarrierTableRecord carrierRecord);
 
-    RouteTableRecord toRecord(Route route);
-
-    @Mapping(source = "page", target = "routes")
-    RoutePageDto toPageDto(List<FullRoute> page, Integer pageNumber, Integer pageSize);
-
-    List<FullRoute> toRoute(List<Pair<RouteTableRecord, CarrierTableRecord>> fullRouteRecords);
-
-    default FullRoute toRoute(Pair<RouteTableRecord, CarrierTableRecord> record) {
+    default FullRoute toFullRoute(Pair<RouteTableRecord, CarrierTableRecord> record) {
         var route = record.getLeft();
         var carrier = record.getRight();
         return new FullRoute(
@@ -50,5 +41,12 @@ public interface RouteMapper {
         );
     }
 
-    Route toRoute(RouteUpdateRequestDto updateRequestDto);
+    List<FullRoute> toFullRouteList(List<Pair<RouteTableRecord, CarrierTableRecord>> fullRouteRecords);
+
+    RouteResponseDto toDto(FullRoute fullRoute);
+
+    @Mapping(source = "page", target = "routes")
+    RoutePageDto toPageDto(List<FullRoute> page, Integer pageNumber, Integer pageSize);
+
+    RouteTableRecord toRecord(Route route);
 }

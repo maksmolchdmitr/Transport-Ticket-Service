@@ -1,4 +1,4 @@
-package maks.molch.dmitr.core.service.entity;
+package maks.molch.dmitr.core.service.auth.entity;
 
 public record Token(
         String token,

@@ -29,7 +29,7 @@ public class RouteServiceImpl implements RouteService {
             var carrierRecord = carrierRepo.findById(route.carrierName())
                     .orElseThrow(() -> new EntityNotFoundException("Carrier with such id not found"));
             var createdRoute = routeRepo.save(routeRecord);
-            return routeMapper.toRoute(createdRoute, carrierRecord);
+            return routeMapper.toFullRoute(createdRoute, carrierRecord);
         } catch (IntegrityConstraintViolationException e) {
             throw new AlreadyExistException("Such route already exist");
         }
@@ -40,7 +40,7 @@ public class RouteServiceImpl implements RouteService {
         var fullRouteRecords = routeRepo.findAllSortByPrimaryKeyAndFiltered(filter);
         var fromIndex = Math.min(pageNumber * pageSize, fullRouteRecords.size());
         var toIndex = Math.min(pageNumber * pageSize + pageSize, fullRouteRecords.size());
-        return routeMapper.toRoute(fullRouteRecords.subList(fromIndex, toIndex));
+        return routeMapper.toFullRouteList(fullRouteRecords.subList(fromIndex, toIndex));
     }
 
     @Override
@@ -49,7 +49,7 @@ public class RouteServiceImpl implements RouteService {
                 .orElseThrow(() -> new EntityNotFoundException("Route with such id not found"));
         var carrierRecord = carrierRepo.findById(routeRecord.getCarrierName())
                 .orElseThrow(() -> new EntityNotFoundException("Carrier with such id not found"));
-        return routeMapper.toRoute(routeRecord, carrierRecord);
+        return routeMapper.toFullRoute(routeRecord, carrierRecord);
     }
 
     @Override
@@ -58,7 +58,7 @@ public class RouteServiceImpl implements RouteService {
         routeRepo.update(routeRecord);
         var carrierRecord = carrierRepo.findById(routeRecord.getCarrierName())
                 .orElseThrow(() -> new EntityNotFoundException("Carrier with such id not found"));
-        return routeMapper.toRoute(routeRecord, carrierRecord);
+        return routeMapper.toFullRoute(routeRecord, carrierRecord);
     }
 
     @Override

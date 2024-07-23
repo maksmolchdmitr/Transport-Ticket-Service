@@ -1,7 +1,7 @@
-package maks.molch.dmitr.core.service.impl;
+package maks.molch.dmitr.core.service.kafka;
 
 import lombok.AllArgsConstructor;
-import maks.molch.dmitr.core.kafka.entity.TicketPurchase;
+import maks.molch.dmitr.core.service.kafka.entity.TicketPurchase;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 

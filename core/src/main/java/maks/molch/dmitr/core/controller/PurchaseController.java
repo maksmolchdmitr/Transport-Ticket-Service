@@ -66,7 +66,7 @@ public class PurchaseController {
     @GetMapping("/all/{user_login}")
     public List<PurchaseTicketResponseDto> purchaseTickets(@PathVariable("user_login") String userLogin) {
         var ticketPurchases = ticketService.getUserTicketPurchases(userLogin);
-        return ticketMapper.toPurchaseDto(ticketPurchases);
+        return ticketMapper.toPurchaseDtoList(ticketPurchases);
     }
 
     @Operation(summary = "get purchase by id")
