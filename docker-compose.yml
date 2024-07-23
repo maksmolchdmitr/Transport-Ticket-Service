@@ -7,7 +7,8 @@ services:
       dockerfile: Dockerfile
     image: analytic-service
     depends_on:
-      - postgresql-analytics
+      postgresql-analytics:
+        condition: service_healthy
     environment:
       POSTGRES_URL: jdbc:postgresql://postgresql-analytics:5432/analytics
       POSTGRES_USER: postgres
@@ -23,8 +24,10 @@ services:
       dockerfile: Dockerfile
     image: core-service
     depends_on:
-      - postgresql
-      - redis
+      postgresql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
     environment:
       POSTGRES_URL: jdbc:postgresql://postgresql:5432/core
       POSTGRES_USER: postgres
@@ -54,6 +57,11 @@ services:
       - backend
     ports:
       - "5432:5432"
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-U", "postgres" ]
+      interval: 10s
+      timeout: 1s
+      retries: 5
 
   postgresql-analytics:
     image: postgres:15-alpine
@@ -67,6 +75,11 @@ services:
       - backend
     ports:
       - "5433:5432"
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-U", "postgres" ]
+      interval: 10s
+      timeout: 1s
+      retries: 5
 
   redis:
     image: redis:latest
@@ -81,6 +94,11 @@ services:
       - redis_data:/data
     networks:
       - backend
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 10s
+      timeout: 1s
+      retries: 10
 
 
   zookeeper:
