@@ -45,7 +45,7 @@ public class TicketServiceImpl implements TicketService {
         var filteredTickets = ticketRepo.findAllSortByPrimaryKeyAndFiltered(ticketFilter);
         var fromIndex = Math.min(pageNumber * pageSize, filteredTickets.size());
         var toIndex = Math.min(pageNumber * pageSize + pageSize, filteredTickets.size());
-        return ticketMapper.toTickets(filteredTickets.subList(fromIndex, toIndex));
+        return ticketMapper.toFullTicketList(filteredTickets.subList(fromIndex, toIndex));
     }
 
     @Override
@@ -77,7 +77,7 @@ public class TicketServiceImpl implements TicketService {
                     .orElseThrow(() -> new EntityNotFoundException("Route with such id not found"));
             var carrierRecord = carrierRepo.findById(routeRecord.getCarrierName())
                     .orElseThrow(() -> new EntityNotFoundException("Carrier with such id not found"));
-            var fullRoute = routeMapper.toRoute(routeRecord, carrierRecord);
+            var fullRoute = routeMapper.toFullRoute(routeRecord, carrierRecord);
             var fullTicket = ticketMapper.toFullTicket(ticketRecord, fullRoute);
             ticketRepo.setPurchasedById(ticketId, userLogin);
             var purchaseRecord = purchasedTicketsRepo.save(ticketMapper.toPurchaseRecord(ticketId, userLogin));
@@ -101,7 +101,7 @@ public class TicketServiceImpl implements TicketService {
         userRepo.findById(userLogin)
                 .orElseThrow(() -> new EntityNotFoundException("User with such id not found"));
         var ticketPurchases = purchasedTicketsRepo.findAllByUserId(userLogin);
-        return ticketMapper.toPurchase(ticketPurchases);
+        return ticketMapper.toPurchaseList(ticketPurchases);
     }
 
     @Override
@@ -122,7 +122,7 @@ public class TicketServiceImpl implements TicketService {
                 .orElseThrow(() -> new EntityNotFoundException("Route with such id not found"));
         var carrierRecord = carrierRepo.findById(routeRecord.getCarrierName())
                 .orElseThrow(() -> new EntityNotFoundException("Carrier with such id not found"));
-        var fullRoute = routeMapper.toRoute(routeRecord, carrierRecord);
+        var fullRoute = routeMapper.toFullRoute(routeRecord, carrierRecord);
         return ticketMapper.toFullTicket(ticketRecord, fullRoute);
     }
 

@@ -8,9 +8,9 @@ import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
 public interface TokenMapper {
-    AuthenticationResponseDto toDto(AccessAndRefreshToken accessAndRefreshToken);
-
     AccessAndRefreshToken toToken(AuthenticationResponseDto authenticationResponseDto);
+
+    AuthenticationResponseDto toDto(AccessAndRefreshToken accessAndRefreshToken);
 
     TokenTableRecord toRecord(Token token);
 }

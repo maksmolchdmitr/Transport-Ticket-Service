@@ -9,9 +9,9 @@ import org.mapstruct.Mapper;
 public interface CarrierMapper {
     Carrier toCarrier(CarrierDto dto);
 
-    CarrierDto toDto(Carrier carrier);
-
     Carrier toCarrier(CarrierTableRecord carrierRecord);
+
+    CarrierDto toDto(Carrier carrier);
 
     CarrierTableRecord toRecord(Carrier carrier);
 }
