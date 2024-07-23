@@ -22,8 +22,6 @@ public interface RouteMapper {
 
     Route toRoute(RouteUpdateRequestDto updateRequestDto);
 
-    FullRoute toFullRoute(RouteResponseDto dto);
-
     @Mapping(source = "carrierRecord", target = "carrier")
     FullRoute toFullRoute(RouteTableRecord routeRecord, CarrierTableRecord carrierRecord);
 

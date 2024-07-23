@@ -28,10 +28,6 @@ public interface TicketMapper {
 
     Ticket toTicket(TicketCreateRequestDto createRequestDto);
 
-    Ticket toTicket(TicketTableRecord ticketTableRecord);
-
-    FullTicket toFullTicket(TicketResponseDto dto);
-
     @Mapping(source = "ticketRecord.id", target = "id")
     FullTicket toFullTicket(TicketTableRecord ticketRecord, FullRoute fullRoute);
 

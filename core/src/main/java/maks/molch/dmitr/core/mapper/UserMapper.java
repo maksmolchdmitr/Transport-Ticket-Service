@@ -14,8 +14,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public interface UserMapper {
     User toUser(UserTableRecord createdRecord);
 
-    User toUser(UserResponseDto user);
-
     User toUser(UserCreateRequestDto createRequestDto);
 
     UserResponseDto toDto(User userRecord);
