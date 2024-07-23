@@ -58,7 +58,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         var authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
         var refreshToken = authHeader.replace(BEARER_PREFIX, "");
         try {
-            if (!tokenRepo.isAlive(refreshToken)) {
+            if (!tokenRepo.isAliveRefreshToken(refreshToken)) {
                 throw new BadCredentialsException("Invalid refresh token");
             }
             var userAuth = jwtService.parseToken(refreshToken);

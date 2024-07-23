@@ -7,5 +7,7 @@ public interface TokenRepo extends JooqRepo<TokenTableRecord, Integer> {
 
     void setRevoked(String token);
 
-    boolean isAlive(String token);
+    boolean isAliveRefreshToken(String token);
+
+    boolean isAliveAccessToken(String token);
 }

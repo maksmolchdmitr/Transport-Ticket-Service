@@ -41,13 +41,26 @@ public class TokenRepoImpl implements TokenRepo {
     }
 
     @Override
-    public boolean isAlive(String token) {
+    public boolean isAliveRefreshToken(String token) {
         Optional<TokenTableRecord> tokenTableRecord = context
                 .selectFrom(TOKEN_TABLE)
                 .where(TOKEN_TABLE.TOKEN.eq(token))
                 .fetchOptional();
         return tokenTableRecord
-                .map(tokenRecord -> FALSE.equals(tokenRecord.getRevoked()))
+                .map(tokenRecord -> FALSE.equals(tokenRecord.getRevoked())
+                        && tokenRecord.getType().equals(REFRESH_TOKEN_TYPE))
+                .orElse(false);
+    }
+
+    @Override
+    public boolean isAliveAccessToken(String token) {
+        Optional<TokenTableRecord> tokenTableRecord = context
+                .selectFrom(TOKEN_TABLE)
+                .where(TOKEN_TABLE.TOKEN.eq(token))
+                .fetchOptional();
+        return tokenTableRecord
+                .map(tokenRecord -> FALSE.equals(tokenRecord.getRevoked())
+                        && tokenRecord.getType().equals(ACCESS_TOKEN_TYPE))
                 .orElse(false);
     }
 
