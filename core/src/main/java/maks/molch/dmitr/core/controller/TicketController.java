@@ -129,8 +129,10 @@ public class TicketController {
     })
     @GetMapping("/page")
     public TicketPageDto getTickets(
+            @Schema(name = "start date and time filter", example = "24.07.2024 13:39")
             @DateTimeFormat(pattern = "dd.MM.yyyy HH:mm")
             @RequestParam(value = "start_date_and_time_filter", required = false) LocalDateTime startDateAndTimeFilter,
+            @Schema(name = "end date and time filter", example = "24.07.2024 13:39")
             @DateTimeFormat(pattern = "dd.MM.yyyy HH:mm")
             @RequestParam(value = "end_date_and_time_filter", required = false) LocalDateTime endDateAndTimeFilter,
             @RequestParam(value = "departure_filter", required = false) String departureFilter,
