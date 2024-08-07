@@ -27,7 +27,7 @@ And update `docker-compose.env` file
 
 ## Swagger endpoint
 
-You can find swagger documentation by **[Url](http://localhost:8080/swagger-ui/index.html)**
+You can find swagger documentation by **[Url](http://localhost:8080/swagger-ui.html)**
 
 ### Reference Documentation
 

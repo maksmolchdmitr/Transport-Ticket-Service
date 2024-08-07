@@ -20,8 +20,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @Tag(name = "Ticket Purchase Controller")
 @RestController
@@ -50,9 +50,9 @@ public class PurchaseController {
             )
     })
     @PostMapping
-    public PurchaseTicketResponseDto purchaseTicket(@Valid @RequestBody PurchaseTicketRequestDto purchaseRequest) {
+    public Mono<PurchaseTicketResponseDto> purchaseTicket(@Valid @RequestBody PurchaseTicketRequestDto purchaseRequest) {
         var ticketPurchase = ticketService.purchase(purchaseRequest.ticketId(), purchaseRequest.userLogin());
-        return ticketMapper.toPurchaseDto(ticketPurchase);
+        return Mono.just(ticketMapper.toPurchaseDto(ticketPurchase));
     }
 
     @Operation(summary = "Get all user purchases")
@@ -64,9 +64,9 @@ public class PurchaseController {
             )
     })
     @GetMapping("/all/{user_login}")
-    public List<PurchaseTicketResponseDto> purchaseTickets(@PathVariable("user_login") String userLogin) {
+    public Flux<PurchaseTicketResponseDto> purchaseTickets(@PathVariable("user_login") String userLogin) {
         var ticketPurchases = ticketService.getUserTicketPurchases(userLogin);
-        return ticketMapper.toPurchaseDtoList(ticketPurchases);
+        return Flux.fromIterable(ticketMapper.toPurchaseDtoList(ticketPurchases));
     }
 
     @Operation(summary = "get purchase by id")
@@ -83,8 +83,8 @@ public class PurchaseController {
             )
     })
     @GetMapping("/{id}")
-    public PurchaseTicketResponseDto getPurchaseTicket(@PathVariable("id") Integer ticketPurchaseId) {
+    public Mono<PurchaseTicketResponseDto> getPurchaseTicket(@PathVariable("id") Integer ticketPurchaseId) {
         var ticketPurchase = ticketService.getTicketPurchase(ticketPurchaseId);
-        return ticketMapper.toPurchaseDto(ticketPurchase);
+        return Mono.just(ticketMapper.toPurchaseDto(ticketPurchase));
     }
 }
