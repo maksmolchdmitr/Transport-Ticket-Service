@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Mono;
 
 @Tag(name = "User Controller")
 @RestController
@@ -40,9 +41,11 @@ public class UserController {
             )
     })
     @PostMapping("/register")
-    public UserResponseDto register(@Valid @RequestBody UserCreateRequestDto createRequestDto) {
-        var userTable = userMapper.toUser(createRequestDto);
-        var userRecord = userService.register(userTable);
-        return userMapper.toDto(userRecord);
+    public Mono<UserResponseDto> register(@Valid @RequestBody UserCreateRequestDto createRequestDto) {
+        return Mono.fromSupplier(() -> {
+            var userTable = userMapper.toUser(createRequestDto);
+            var userRecord = userService.register(userTable);
+            return userMapper.toDto(userRecord);
+        });
     }
 }

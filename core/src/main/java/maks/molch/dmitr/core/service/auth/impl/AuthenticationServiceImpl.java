@@ -2,8 +2,6 @@ package maks.molch.dmitr.core.service.auth.impl;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.security.SignatureException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import maks.molch.dmitr.core.mapper.TokenMapper;
 import maks.molch.dmitr.core.repo.TokenRepo;
@@ -21,6 +19,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ServerWebExchange;
+import reactor.core.publisher.Mono;
 
 @Service
 @AllArgsConstructor
@@ -34,47 +34,54 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final TokenMapper tokenMapper;
 
     @Override
-    public AccessAndRefreshToken authenticateAndGenerateToken(String username, String password) throws AuthenticationException, EntityNotFoundException {
-        try {
-            var authData = authenticate(new UsernamePasswordAuthenticationToken(username, password));
-            tokenRepo.setAllRevokedByUserIdWithoutRefreshToken(authData.getName());
-            var accessToken = jwtService.generateAccessToken(authData);
-            tokenRepo.save(tokenMapper.toRecord(new Token(accessToken, username, Token.Type.ACCESS_TOKEN)));
-            var refreshToken = jwtService.generateRefreshToken(authData);
-            tokenRepo.save(tokenMapper.toRecord(new Token(refreshToken, username, Token.Type.REFRESH_TOKEN)));
-            return new AccessAndRefreshToken(
-                    BEARER_PREFIX + accessToken,
-                    BEARER_PREFIX + refreshToken
-            );
-        } catch (UsernameNotFoundException e) {
-            throw new EntityNotFoundException("Username not found!");
-        } catch (BadCredentialsException | SignatureException e) {
-            throw new AuthenticationException("Bad credentials!");
-        }
+    public Mono<AccessAndRefreshToken> authenticateAndGenerateToken(String username, String password) {
+        return Mono.fromCallable(() -> {
+            try {
+                var authData = authenticate(new UsernamePasswordAuthenticationToken(username, password));
+                tokenRepo.setAllRevokedByUserIdWithoutRefreshToken(authData.getName());
+                var accessToken = jwtService.generateAccessToken(authData);
+                tokenRepo.save(tokenMapper.toRecord(new Token(accessToken, username, Token.Type.ACCESS_TOKEN)));
+                var refreshToken = jwtService.generateRefreshToken(authData);
+                tokenRepo.save(tokenMapper.toRecord(new Token(refreshToken, username, Token.Type.REFRESH_TOKEN)));
+                return new AccessAndRefreshToken(
+                        BEARER_PREFIX + accessToken,
+                        BEARER_PREFIX + refreshToken
+                );
+            } catch (UsernameNotFoundException e) {
+                throw new EntityNotFoundException("Username not found!");
+            } catch (BadCredentialsException | SignatureException e) {
+                throw new AuthenticationException("Bad credentials!");
+            }
+        });
     }
 
     @Override
-    public AccessAndRefreshToken refreshToken(HttpServletRequest request, HttpServletResponse response) {
-        var authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-        var refreshToken = authHeader.replace(BEARER_PREFIX, "");
-        try {
-            if (!tokenRepo.isAliveRefreshToken(refreshToken)) {
+    public Mono<AccessAndRefreshToken> refreshToken(ServerWebExchange exchange) {
+        return Mono.fromCallable(() -> {
+            var authHeader = exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
+            if (authHeader == null || !authHeader.startsWith(BEARER_PREFIX)) {
                 throw new BadCredentialsException("Invalid refresh token");
             }
-            var userAuth = jwtService.parseToken(refreshToken);
-            tokenRepo.setAllRevokedByUserIdWithoutRefreshToken(userAuth.getName());
-            var newAccessToken = jwtService.generateAccessToken(userAuth);
-            tokenRepo.save(tokenMapper.toRecord(new Token(newAccessToken, userAuth.getName(), Token.Type.ACCESS_TOKEN)));
-            return new AccessAndRefreshToken(
-                    BEARER_PREFIX + newAccessToken,
-                    BEARER_PREFIX + refreshToken
-            );
-        } catch (UsernameNotFoundException | BadCredentialsException ignored) {
-        } catch (ExpiredJwtException e) {
-            tokenRepo.setRevoked(refreshToken);
-        }
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        return null;
+            var refreshToken = authHeader.replace(BEARER_PREFIX, "");
+            try {
+                if (!tokenRepo.isAliveRefreshToken(refreshToken)) {
+                    throw new BadCredentialsException("Invalid refresh token");
+                }
+                var userAuth = jwtService.parseToken(refreshToken);
+                tokenRepo.setAllRevokedByUserIdWithoutRefreshToken(userAuth.getName());
+                var newAccessToken = jwtService.generateAccessToken(userAuth);
+                tokenRepo.save(tokenMapper.toRecord(new Token(newAccessToken, userAuth.getName(), Token.Type.ACCESS_TOKEN)));
+                return new AccessAndRefreshToken(
+                        BEARER_PREFIX + newAccessToken,
+                        BEARER_PREFIX + refreshToken
+                );
+            } catch (UsernameNotFoundException | BadCredentialsException ignored) {
+            } catch (ExpiredJwtException e) {
+                tokenRepo.setRevoked(refreshToken);
+            }
+            exchange.getResponse().setStatusCode(org.springframework.http.HttpStatus.UNAUTHORIZED);
+            return null;
+        });
     }
 
     private UsernamePasswordAuthenticationToken authenticate(Authentication authentication)

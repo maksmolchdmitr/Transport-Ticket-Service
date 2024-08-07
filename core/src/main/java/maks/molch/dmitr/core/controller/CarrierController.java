@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Mono;
 
 @Tag(name = "Carrier Controller")
 @RestController
@@ -45,10 +46,10 @@ public class CarrierController {
             )
     })
     @PostMapping
-    public CarrierDto addCarrier(@Valid @RequestBody CarrierDto dto) {
+    public Mono<CarrierDto> addCarrier(@Valid @RequestBody CarrierDto dto) {
         var carrier = carrierMapper.toCarrier(dto);
         Carrier createdCarrier = carrierService.addCarrier(carrier);
-        return carrierMapper.toDto(createdCarrier);
+        return Mono.just(carrierMapper.toDto(createdCarrier));
     }
 
     @Operation(summary = "Get carrier by id")
@@ -65,9 +66,9 @@ public class CarrierController {
             )
     })
     @GetMapping("/{id}")
-    public CarrierDto getCarrier(@PathVariable("id") String id) {
+    public Mono<CarrierDto> getCarrier(@PathVariable("id") String id) {
         var carrier = carrierService.getCarrier(id);
-        return carrierMapper.toDto(carrier);
+        return Mono.just(carrierMapper.toDto(carrier));
     }
 
     @Operation(summary = "Update carrier")
@@ -84,10 +85,10 @@ public class CarrierController {
             )
     })
     @PutMapping
-    public CarrierDto updateCarrier(@Valid @RequestBody CarrierDto dto) {
+    public Mono<CarrierDto> updateCarrier(@Valid @RequestBody CarrierDto dto) {
         var carrier = carrierMapper.toCarrier(dto);
         var updatedCarrier = carrierService.update(carrier);
-        return carrierMapper.toDto(updatedCarrier);
+        return Mono.just(carrierMapper.toDto(updatedCarrier));
     }
 
     @Operation(summary = "Delete carrier by id")
@@ -103,7 +104,7 @@ public class CarrierController {
             )
     })
     @DeleteMapping("/{id}")
-    public void deleteCarrier(@PathVariable("id") String id) {
-        carrierService.delete(id);
+    public Mono<Void> deleteCarrier(@PathVariable("id") String id) {
+        return Mono.fromRunnable(() -> carrierService.delete(id));
     }
 }

@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Mono;
 
 import java.util.Optional;
 
@@ -51,10 +52,10 @@ public class RouteController {
             )
     })
     @PostMapping
-    public RouteResponseDto route(@Valid @RequestBody RouteCreateRequestDto createRequestDto) {
+    public Mono<RouteResponseDto> route(@Valid @RequestBody RouteCreateRequestDto createRequestDto) {
         var route = routeMapper.toRoute(createRequestDto);
         FullRoute fullRoute = routeService.addRoute(route);
-        return routeMapper.toDto(fullRoute);
+        return Mono.just(routeMapper.toDto(fullRoute));
     }
 
     @Operation(summary = "Get route by id")
@@ -71,9 +72,9 @@ public class RouteController {
             )
     })
     @GetMapping("/{id}")
-    public RouteResponseDto route(@PathVariable Integer id) {
+    public Mono<RouteResponseDto> route(@PathVariable Integer id) {
         var fullRoute = routeService.getFullRoute(id);
-        return routeMapper.toDto(fullRoute);
+        return Mono.just(routeMapper.toDto(fullRoute));
     }
 
     @Operation(summary = "Update route")
@@ -90,10 +91,10 @@ public class RouteController {
             )
     })
     @PutMapping
-    public RouteResponseDto updateRoute(@Valid @RequestBody RouteUpdateRequestDto updateRequestDto) {
+    public Mono<RouteResponseDto> updateRoute(@Valid @RequestBody RouteUpdateRequestDto updateRequestDto) {
         var route = routeMapper.toRoute(updateRequestDto);
         var fullUpdatedRoute = routeService.updateRoute(updateRequestDto.id(), route);
-        return routeMapper.toDto(fullUpdatedRoute);
+        return Mono.just(routeMapper.toDto(fullUpdatedRoute));
     }
 
     @Operation(summary = "Delete route by id")
@@ -109,25 +110,27 @@ public class RouteController {
             )
     })
     @DeleteMapping
-    public void deleteRoute(@RequestParam Integer id) {
-        routeService.deleteRoute(id);
+    public Mono<Void> deleteRoute(@RequestParam Integer id) {
+        return Mono.fromRunnable(() -> routeService.deleteRoute(id));
     }
 
     @Operation(summary = "Get route page by filters")
     @GetMapping("/page")
-    public RoutePageDto routes(
+    public Mono<RoutePageDto> routes(
             @RequestParam(value = "departure_filter", required = false) String departureFilter,
             @RequestParam(value = "arrival_filter", required = false) String arrivalFilter,
             @RequestParam(value = "carrier_name_filter", required = false) String carrierNameFilter,
             @RequestParam(value = "page_number", required = false, defaultValue = "0") Integer pageNumber,
             @RequestParam(value = "page_size", required = false, defaultValue = "10") Integer pageSize
     ) {
-        var filter = new RouteFilter(
-                Optional.ofNullable(departureFilter),
-                Optional.ofNullable(arrivalFilter),
-                Optional.ofNullable(carrierNameFilter)
-        );
-        var page = routeService.getRoutePage(filter, pageNumber, pageSize);
-        return routeMapper.toPageDto(page, pageNumber, pageSize);
+        return Mono.fromSupplier(() -> {
+            var filter = new RouteFilter(
+                    Optional.ofNullable(departureFilter),
+                    Optional.ofNullable(arrivalFilter),
+                    Optional.ofNullable(carrierNameFilter)
+            );
+            var page = routeService.getRoutePage(filter, pageNumber, pageSize);
+            return routeMapper.toPageDto(page, pageNumber, pageSize);
+        });
     }
 }

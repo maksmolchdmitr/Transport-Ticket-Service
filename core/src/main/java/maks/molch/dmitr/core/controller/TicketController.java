@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -52,10 +53,10 @@ public class TicketController {
             )
     })
     @PostMapping
-    public TicketResponseDto addTicket(@Valid @RequestBody TicketCreateRequestDto createRequestDto) {
+    public Mono<TicketResponseDto> addTicket(@Valid @RequestBody TicketCreateRequestDto createRequestDto) {
         var ticket = ticketMapper.toTicket(createRequestDto);
         var fullCreatedTicket = ticketService.addTicket(ticket);
-        return ticketMapper.toDto(fullCreatedTicket);
+        return Mono.just(ticketMapper.toDto(fullCreatedTicket));
     }
 
     @Operation(summary = "Get ticket by id")
@@ -72,9 +73,9 @@ public class TicketController {
             )
     })
     @GetMapping("/{id}")
-    public TicketResponseDto getTicket(@PathVariable Integer id) {
+    public Mono<TicketResponseDto> getTicket(@PathVariable Integer id) {
         var fullTicket = ticketService.getFullTicket(id);
-        return ticketMapper.toDto(fullTicket);
+        return Mono.just(ticketMapper.toDto(fullTicket));
     }
 
     @Operation(summary = "Update ticket")
@@ -91,10 +92,10 @@ public class TicketController {
             )
     })
     @PutMapping
-    public TicketResponseDto update(@Valid @RequestBody TicketUpdateRequestDto updateRequestDto) {
+    public Mono<TicketResponseDto> update(@Valid @RequestBody TicketUpdateRequestDto updateRequestDto) {
         var ticket = ticketMapper.toTicket(updateRequestDto);
         var fullUpdatedTicket = ticketService.updateTicket(updateRequestDto.id(), ticket);
-        return ticketMapper.toDto(fullUpdatedTicket);
+        return Mono.just(ticketMapper.toDto(fullUpdatedTicket));
     }
 
     @Operation(summary = "Delete ticket by id")
@@ -115,8 +116,8 @@ public class TicketController {
             )
     })
     @DeleteMapping("/{id}")
-    public void deleteTicket(@PathVariable Integer id) {
-        ticketService.deleteTicket(id);
+    public Mono<Void> deleteTicket(@PathVariable Integer id) {
+        return Mono.fromRunnable(() -> ticketService.deleteTicket(id));
     }
 
     @Operation(summary = "Get tickets page by filters")
@@ -128,7 +129,7 @@ public class TicketController {
             )
     })
     @GetMapping("/page")
-    public TicketPageDto getTickets(
+    public Mono<TicketPageDto> getTickets(
             @Schema(name = "start date and time filter", example = "24.07.2024 13:39")
             @DateTimeFormat(pattern = "dd.MM.yyyy HH:mm")
             @RequestParam(value = "start_date_and_time_filter", required = false) LocalDateTime startDateAndTimeFilter,
@@ -141,15 +142,17 @@ public class TicketController {
             @RequestParam(value = "page_number", required = false, defaultValue = "0") Integer pageNumber,
             @RequestParam(value = "page_size", required = false, defaultValue = "10") Integer pageSize
     ) {
-        var filter = new TicketFilter(
-                Optional.ofNullable(startDateAndTimeFilter),
-                Optional.ofNullable(endDateAndTimeFilter),
-                Optional.ofNullable(departureFilter),
-                Optional.ofNullable(arrivalFilter),
-                Optional.ofNullable(carrierNameFilter),
-                true
-        );
-        var page = ticketService.getTicketsPage(pageNumber, pageSize, filter);
-        return ticketMapper.toPageDto(page, pageNumber, pageSize);
+        return Mono.fromSupplier(() -> {
+            var filter = new TicketFilter(
+                    Optional.ofNullable(startDateAndTimeFilter),
+                    Optional.ofNullable(endDateAndTimeFilter),
+                    Optional.ofNullable(departureFilter),
+                    Optional.ofNullable(arrivalFilter),
+                    Optional.ofNullable(carrierNameFilter),
+                    true
+            );
+            var page = ticketService.getTicketsPage(pageNumber, pageSize, filter);
+            return ticketMapper.toPageDto(page, pageNumber, pageSize);
+        });
     }
 }

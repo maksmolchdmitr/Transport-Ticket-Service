@@ -6,8 +6,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import maks.molch.dmitr.core.dto.request.UserLoginRequestDto;
@@ -18,6 +16,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ServerWebExchange;
+import reactor.core.publisher.Mono;
 
 @Tag(name = "Authentication Controller")
 @RestController
@@ -36,9 +36,9 @@ public class AuthenticationController {
             )
     })
     @PostMapping("/refresh-token")
-    public AuthenticationResponseDto refreshToken(HttpServletRequest request, HttpServletResponse response) {
-        var token = authenticationService.refreshToken(request, response);
-        return tokenMapper.toDto(token);
+    public Mono<AuthenticationResponseDto> refreshToken(ServerWebExchange exchange) {
+        return authenticationService.refreshToken(exchange)
+                .map(tokenMapper::toDto);
     }
 
     @Operation(summary = "Login user and generate access and refresh tokens")
@@ -50,8 +50,8 @@ public class AuthenticationController {
             )
     })
     @PostMapping("/login")
-    public AuthenticationResponseDto login(@Valid @RequestBody UserLoginRequestDto userLoginRequestDto) {
-        var token = authenticationService.authenticateAndGenerateToken(userLoginRequestDto.login(), userLoginRequestDto.password());
-        return tokenMapper.toDto(token);
+    public Mono<AuthenticationResponseDto> login(@Valid @RequestBody UserLoginRequestDto userLoginRequestDto) {
+        return authenticationService.authenticateAndGenerateToken(userLoginRequestDto.login(), userLoginRequestDto.password())
+                .map(tokenMapper::toDto);
     }
 }

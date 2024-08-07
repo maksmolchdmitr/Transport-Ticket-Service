@@ -1,10 +1,6 @@
 package maks.molch.dmitr.core.service.auth.impl;
 
 import io.jsonwebtoken.ExpiredJwtException;
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import maks.molch.dmitr.core.repo.TokenRepo;
 import maks.molch.dmitr.core.service.auth.JwtAuthorizationFilter;
@@ -13,10 +9,11 @@ import maks.molch.dmitr.core.service.exception.AuthenticationException;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.context.ReactiveSecurityContextHolder;
 import org.springframework.stereotype.Service;
-
-import java.io.IOException;
+import org.springframework.web.server.ServerWebExchange;
+import org.springframework.web.server.WebFilterChain;
+import reactor.core.publisher.Mono;
 
 @Service
 @AllArgsConstructor
@@ -27,24 +24,22 @@ public class JwtAuthorizationFilterImpl extends JwtAuthorizationFilter {
     private final TokenRepo tokenRepo;
 
     @Override
-    protected void doFilterInternal(
-            HttpServletRequest request,
-            @NotNull HttpServletResponse response,
-            @NotNull FilterChain filterChain) throws ServletException, IOException {
-        var authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+    public @NotNull Mono<Void> filterInternal(ServerWebExchange exchange, @NotNull WebFilterChain chain) {
+        String authHeader = exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
         if (authHeader == null || !authHeader.startsWith(BEARER_PREFIX)) {
-            throw new AuthenticationException("Authorization header is invalid");
+            return Mono.error(new AuthenticationException("Authorization header is invalid"));
         }
-        var token = authHeader.replace(BEARER_PREFIX, "");
+        String token = authHeader.replace(BEARER_PREFIX, "");
         try {
             if (!tokenRepo.isAliveAccessToken(token)) {
-                throw new BadCredentialsException("Invalid access token");
+                return Mono.error(new BadCredentialsException("Invalid access token"));
             }
-            SecurityContextHolder.getContext().setAuthentication(jwtService.parseToken(token));
-            filterChain.doFilter(request, response);
+            return chain.filter(exchange)
+                    .contextWrite(context -> ReactiveSecurityContextHolder.withAuthentication(jwtService.parseToken(token)));
         } catch (ExpiredJwtException e) {
             tokenRepo.setRevoked(token);
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            exchange.getResponse().setStatusCode(org.springframework.http.HttpStatus.UNAUTHORIZED);
+            return Mono.empty();
         }
     }
 }
